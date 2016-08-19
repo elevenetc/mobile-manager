@@ -1,5 +1,32 @@
 extends layout
 
 block content
-	h1= title
-	p Welcome to #{title}
+	h1= 'Zzddsdf'
+	p 1. Welcome to #{title}
+	p 2. Welcome to #{paramA}
+	p 3. Welcome to #{paramC}
+	p 4. Welcome to #{paramObj}
+	p 5. Welcome to #{paramObjX.x}
+	- var xVar = 10 + 10
+	- var yVar = xVar + 1
+	p 6. Welcome to #{yVar}
+	p 7. devices #{devices}
+	p 8. devices.length #{devices.length}
+	p 9. deviceLoader: #{deviceLoader}
+	p 10. loading...
+	script(type='text/javascript' src='./controllers/ajax.js')
+	script.
+
+	button(onclick='test(1)') Click
+	- for (var i = 0; i < devices.length; i++)
+	- var device = devices[i]
+	- var id = device.id
+	- var name = device.name
+	p id: !{id} name: !{name}
+	script.
+
+		function hello(){
+			deviceLoader.load(function(devices){
+				console.log(devices);
+			})
+		}
