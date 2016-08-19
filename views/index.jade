@@ -15,14 +15,15 @@ block content
 	p 9. deviceLoader: #{deviceLoader}
 	p 10. loading...
 	script(type='text/javascript' src='./controllers/ajax.js')
+
 	script.
 
 	button(onclick='test(1)') Click
 	- for (var i = 0; i < devices.length; i++)
-	- var device = devices[i]
-	- var id = device.id
-	- var name = device.name
-	p id: !{id} name: !{name}
+		- var device = devices[i]
+		- var id = device.id
+		- var name = device.name
+		p id: !{id} name: !{name}
 	script.
 
 		function hello(){
