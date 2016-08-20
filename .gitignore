@@ -4,3 +4,4 @@
 /device-manager-web.ipr
 /node_modules/
 /.idea/
+.DS_Store
