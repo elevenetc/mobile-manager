@@ -1,33 +1,52 @@
 extends layout
 
 block content
-	h1= 'Zzddsdf'
-	p 1. Welcome to #{title}
-	p 2. Welcome to #{paramA}
-	p 3. Welcome to #{paramC}
-	p 4. Welcome to #{paramObj}
-	p 5. Welcome to #{paramObjX.x}
-	- var xVar = 10 + 10
-	- var yVar = xVar + 1
-	p 6. Welcome to #{yVar}
-	p 7. devices #{devices}
-	p 8. devices.length #{devices.length}
-	p 9. deviceLoader: #{deviceLoader}
-	p 10. loading...
-	script(type='text/javascript' src='./controllers/ajax.js')
+    h1= 'Zzddsdf'
+    #devices-list
+        p xxx
+    p 1. Welcome to #{title}
 
-	script.
+    p 2. Welcome to #{paramA}
+    p 3. Welcome to #{paramC}
+    p 4. Welcome to #{paramObj}
+    p 5. Welcome to #{paramObjX.x}
+    - var xVar = 10 + 10
+    - var yVar = xVar + 1
+    p 6. Welcome to #{yVar}
+    p 7. devices #{devices}
+    p 8. devices.length #{devices.length}
+    p 9. deviceLoader: #{deviceLoader}
+    p 10. loading...
 
-	button(onclick='test(1)') Click
-	- for (var i = 0; i < devices.length; i++)
-		- var device = devices[i]
-		- var id = device.id
-		- var name = device.name
-		p id: !{id} name: !{name}
-	script.
+    mixin row(items)
+        tr
+            each item, index in items
+                td= item
 
-		function hello(){
-			deviceLoader.load(function(devices){
-				console.log(devices);
-			})
-		}
+    mixin table(tableData)
+        table
+            each row, index in tableData
+                +row(row)
+
+    +table(['aaa', 'bbb', 'ccc'])
+
+    script(type='text/javascript' src='./controllers/ajax.js')
+    script(type='text/javascript' src='./controllers/index.js')
+    script(type='text/javascript' src='./utils/utils.js')
+
+    script.
+
+    button(onclick='test(1)') Click
+    - for (var i = 0; i < devices.length; i++)
+        - var device = devices[i]
+        - var id = device.id
+        - var name = device.name
+        p id: !{id} name: !{name}
+    script.
+        function fillItems(items) {
+            console.log('some hello!: ' + items);
+            for(let i = 0; i < items.length; i++){
+                duplicate('devices-list', 'devices-list' + i);
+            }
+
+        }

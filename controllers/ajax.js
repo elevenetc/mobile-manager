@@ -58,12 +58,3 @@ ajax.post = function (url, data, callback, async) {
 	}
 	ajax.send(url, callback, 'POST', query.join('&'), async)
 };
-
-function test(param) {
-	console.log('begin');
-	setTimeout(function () {
-		console.log('end:' + param);
-	}, 1000);
-
-}
-test('loaded!');

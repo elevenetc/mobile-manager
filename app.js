@@ -21,6 +21,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/controllers', express.static('./controllers'));
+app.use('/utils', express.static('./utils'));
 
 app.use('/', routes);
 app.use('/users', users);
