@@ -2,7 +2,7 @@
  * Created by eleven on 20/08/2016.
  */
 module.exports = {
-    dbFile: 'dbFile.db',
-    dbUser: 'hello',
-    dbPass: 'hello'
+    dbFile: 'device_manager',
+    dbUser: 'root',
+    dbPass: 'Mysqlpass0'
 };
