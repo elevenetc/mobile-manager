@@ -58,16 +58,12 @@ class DatabaseSequelize extends Database {
         });
     }
 
-    getAllDevices(dataHandler, errorHandler) {
+    getDevices(dataHandler, errorHandler) {
         this.deviceModel.findAll().then(dataHandler).catch(errorHandler);
     }
 
-    deleteDevice(id, dataHandler, errorHandler) {
-        this.deviceModel.destroy({
-            where: {
-                id: id
-            }
-        }).success(dataHandler).catch(errorHandler);
+    deleteDevice(id, successHandler, errorHandler) {
+        this.internalDelete(id, successHandler, errorHandler);
     }
 
     internalCreateOrUpdate(device, okHandler, failHandler) {
@@ -101,6 +97,12 @@ class DatabaseSequelize extends Database {
         }).then(function () {
             okHandler(Database.UPDATED);
         }).catch(failHandler);
+    }
+
+    internalDelete(id, dataHandler, errorHandler) {
+        this.deviceModel.destroy({
+            where: {id: id}
+        }).then(dataHandler).catch(errorHandler);
     }
 }
 

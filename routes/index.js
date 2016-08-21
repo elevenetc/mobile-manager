@@ -19,11 +19,10 @@ router.get('/', function (req, res, next) {
     });
 });
 
-router.post('/devices', function (req, res, next) {
+router.post('/devices', function (req, res) {
     const device = req.body;
     database.createOrUpdate(device, function (result) {
-        res.status(200);
-        res.send({result: result});
+        handleSuccess(res, {result: result});
     }, function (error) {
         res.status(500);
         res.send({result: error.message, device: device});
@@ -31,30 +30,30 @@ router.post('/devices', function (req, res, next) {
 
 });
 
-router.get('/devices', function (req, res, next) {
+router.get('/devices', function (req, res) {
 
-    database.getAllDevices(function (devices) {
-        if (devices == null) {
-
-        }
+    database.getDevices(function (devices) {
+        handleSuccess(res, devices);
     }, function (error) {
-        if (error == null) {
-
-        }
+        res.status(500);
+        res.send({result: error});
     });
-
-    const result = [
-        {id: 334, name: 'Note 5'},
-        {id: 445, name: 'Nexus 4'}
-    ];
-
-    setTimeout(function () {
-        res.setHeader('Content-Type', 'application/json');
-        res.send(JSON.stringify(result));
-    }, 1000);
-
-    //next();
 });
+
+router.delete('/devices', function (req, res) {
+    const id = req.query.id;
+    database.deleteDevice(id, function (result) {
+        handleSuccess(res, {deleted: result});
+    }, function (error) {
+
+    });
+});
+
+function handleSuccess(res, result) {
+    res.status(200);
+    res.setHeader('Content-Type', 'application/json');
+    res.send(JSON.stringify(result));
+}
 
 
 module.exports = router;
