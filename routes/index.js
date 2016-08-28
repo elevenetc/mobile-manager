@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 const DeviceLoader = require('../controllers/device-loader');
 const database = require('../database/database-sequelize');
+const winston = require('winston');
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
@@ -20,14 +21,16 @@ router.get('/', function (req, res, next) {
 });
 
 router.post('/devices', function (req, res) {
+    console.log('devices:post');
     const device = req.body;
     database.createOrUpdate(device, function (result) {
+        console.log('devices:post:ok');
         handleSuccess(res, {result: result});
     }, function (error) {
+        console.log('devices:post:fail', error);
         res.status(500);
         res.send({result: error.message, device: device});
     });
-
 });
 
 router.get('/devices', function (req, res) {
@@ -41,7 +44,7 @@ router.get('/devices', function (req, res) {
 });
 
 router.delete('/devices', function (req, res) {
-    const id = req.query.id;
+    const id = req.query.deviceId
     database.deleteDevice(id, function (result) {
         handleSuccess(res, {deleted: result});
     }, function (error) {

@@ -7,14 +7,14 @@ class Database {
     }
 
     isDeviceValid(device) {
-        return device !== null && device !== undefined && device.id !== null && device.id !== undefined;
+        return device !== null && device !== undefined && device.deviceId !== null && device.deviceId !== undefined;
     }
 
-    resultUpdated(){
+    resultUpdated() {
         return Database.UPDATED;
     }
 
-    resultCreated(){
+    resultCreated() {
         return Database.CREATED;
     }
 }

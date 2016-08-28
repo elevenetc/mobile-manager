@@ -70,7 +70,7 @@ class DatabaseSequelize extends Database {
 
         const db = this;
         this.deviceModel.findOne({
-            where: {deviceId: device.id}
+            where: {deviceId: device.deviceId}
         }).then(function (found) {
             if (!found) {
                 db.internalCreate(device, okHandler, failHandler);
@@ -82,7 +82,7 @@ class DatabaseSequelize extends Database {
 
     internalCreate(device, okHandler, failHandler) {
         this.deviceModel.create({
-            deviceId: device.id,
+            deviceId: device.deviceId,
             name: device.name
         }).then(function () {
             okHandler(Database.CREATED);
@@ -92,7 +92,7 @@ class DatabaseSequelize extends Database {
     internalUpdate(device, okHandler, failHandler) {
         this.deviceModel.update(device, {
             where: {
-                deviceId: device.id
+                deviceId: device.deviceId
             }
         }).then(function () {
             okHandler(Database.UPDATED);
