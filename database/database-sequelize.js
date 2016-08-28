@@ -22,7 +22,9 @@ class DatabaseSequelize extends Database {
         super();
         this.deviceModel = sequelize.define('devices', {
             deviceId: {type: Sequelize.STRING},
-            name: Sequelize.STRING
+            gcmToken: {type: Sequelize.STRING},
+            manufacturer: {type: Sequelize.STRING},
+            model: {type: Sequelize.STRING}
         }, {
             timestamps: false
         });
@@ -81,10 +83,7 @@ class DatabaseSequelize extends Database {
     }
 
     internalCreate(device, okHandler, failHandler) {
-        this.deviceModel.create({
-            deviceId: device.deviceId,
-            name: device.name
-        }).then(function () {
+        this.deviceModel.create(device).then(function () {
             okHandler(Database.CREATED);
         }).catch(failHandler);
     }

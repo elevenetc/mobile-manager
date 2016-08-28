@@ -21,8 +21,8 @@ router.get('/', function (req, res, next) {
 });
 
 router.post('/devices', function (req, res) {
-    console.log('devices:post');
     const device = req.body;
+    console.log('devices:post', device);
     database.createOrUpdate(device, function (result) {
         console.log('devices:post:ok');
         handleSuccess(res, {result: result});
