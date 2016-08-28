@@ -21,7 +21,7 @@ class DatabaseSequelize extends Database {
     constructor() {
         super();
         this.deviceModel = sequelize.define('devices', {
-            id: {type: Sequelize.INTEGER, primaryKey: true},
+            deviceId: {type: Sequelize.STRING},
             name: Sequelize.STRING
         }, {
             timestamps: false
@@ -51,7 +51,7 @@ class DatabaseSequelize extends Database {
     getDevice(id, handler) {
         this.deviceModel.findOne({
             where: {
-                id: id
+                deviceId: id
             }
         }).then(function (device) {
             handler(device);
@@ -70,7 +70,7 @@ class DatabaseSequelize extends Database {
 
         const db = this;
         this.deviceModel.findOne({
-            where: {id: device.id}
+            where: {deviceId: device.id}
         }).then(function (found) {
             if (!found) {
                 db.internalCreate(device, okHandler, failHandler);
@@ -82,7 +82,7 @@ class DatabaseSequelize extends Database {
 
     internalCreate(device, okHandler, failHandler) {
         this.deviceModel.create({
-            id: device.id,
+            deviceId: device.id,
             name: device.name
         }).then(function () {
             okHandler(Database.CREATED);
@@ -92,7 +92,7 @@ class DatabaseSequelize extends Database {
     internalUpdate(device, okHandler, failHandler) {
         this.deviceModel.update(device, {
             where: {
-                id: device.id
+                deviceId: device.id
             }
         }).then(function () {
             okHandler(Database.UPDATED);
@@ -101,7 +101,7 @@ class DatabaseSequelize extends Database {
 
     internalDelete(id, dataHandler, errorHandler) {
         this.deviceModel.destroy({
-            where: {id: id}
+            where: {deviceId: id}
         }).then(dataHandler).catch(errorHandler);
     }
 }
