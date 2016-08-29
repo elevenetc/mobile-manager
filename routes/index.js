@@ -3,6 +3,7 @@ var router = express.Router();
 const DeviceLoader = require('../controllers/device-loader');
 const database = require('../database/database-sequelize');
 const winston = require('winston');
+const gcmSender = require('../gcm/gcm-sender');
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
@@ -18,6 +19,23 @@ router.get('/', function (req, res, next) {
             {id: 445, name: 'Nexus 4'}
         ]
     });
+});
+
+router.post('/ping', function (req, res) {
+    console.log('ping:');
+    const device = req.body;
+    console.log(device);
+    res.status(200);
+    res.send('');
+
+    gcmSender.ping(
+        device,
+        function () {
+            console.log('ping: ok');
+        }, function () {
+            console.log('ping: fail');
+        }
+    );
 });
 
 router.post('/devices', function (req, res) {

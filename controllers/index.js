@@ -2,7 +2,6 @@
  * Created by eugene.levenetc on 19/08/16.
  */
 function onCreate() {
-    console.log('index: onCreateZ');
     ajax.get('/devices', null, function (response) {
         console.log('responze: ' + response);
         try {
@@ -13,6 +12,19 @@ function onCreate() {
             fillItems([]);
         }
 
+    })
+}
+
+/**
+ * @param device {Device}
+ */
+function pingDevice(device) {
+    ajax.post('/ping', device, function (response) {
+        try {
+            var result = JSON.parse(response);
+        } catch (e) {
+
+        }
     })
 }
 
