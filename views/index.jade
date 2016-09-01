@@ -10,17 +10,21 @@ block content
     script(type='text/javascript' src='./utils/utils.js')
 
     script.
-        function fillItems(items) {
+        function fillItems(items, error) {
 
-
-
-            if(items.length > 0){
-                remove('status');
-                for (let i = 0; i < items.length; i++) {
-                    duplicate('devices-list', items[i]);
-                }
+            if(error){
+                setText('status', error.error);
             }else{
-                setText('status', 'no devices');
+                if(items.length > 0){
+                    remove('status');
+                    for (let i = 0; i < items.length; i++) {
+                        duplicate('devices-list', items[i]);
+                    }
+                }else{
+                    setText('status', 'no devices');
+                }
             }
+
+
 
         }

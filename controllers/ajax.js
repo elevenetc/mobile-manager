@@ -34,7 +34,7 @@ ajax.send = function (url, callback, method, data, async) {
 	x.open(method, url, async);
 	x.onreadystatechange = function () {
 		if (x.readyState == 4) {
-			callback(x.responseText)
+			callback(x.status, x.responseText)
 		}
 	};
 	if (method == 'POST') {
