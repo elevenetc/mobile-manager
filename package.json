@@ -18,6 +18,7 @@
     "node-gcm": "^0.14.4",
     "sequelize": "^3.24.1",
     "serve-favicon": "~2.3.0",
+    "sinon": "^1.17.5",
     "winston": "^2.2.0"
   }
 }
