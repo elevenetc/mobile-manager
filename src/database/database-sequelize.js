@@ -1,7 +1,7 @@
 /**
  * Created by eleven on 20/08/2016.
  */
-const localSettings = require('../local-settings');
+const localSettings = require('../../local-settings');
 const Sequelize = require('sequelize');
 const ERROR = require('../errors/error');
 const Database = require('./database');
@@ -16,12 +16,15 @@ const sequelize = new Sequelize(
     }
 );
 
+sequelize.sync({force: true});
+
 class DatabaseSequelize extends Database {
 
     constructor() {
         super();
         this.deviceModel = sequelize.define('devices', {
             deviceId: {type: Sequelize.STRING},
+            name: {type: Sequelize.STRING},
             gcmToken: {type: Sequelize.STRING},
             manufacturer: {type: Sequelize.STRING},
             model: {type: Sequelize.STRING}

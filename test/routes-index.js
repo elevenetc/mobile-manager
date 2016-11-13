@@ -11,7 +11,7 @@ describe('Given foo requires the bar and path modules and bar.bar() returns "bar
 		let routes;
 
 		before(function () {
-			routes = require('../routes/index-impl');
+			routes = require('./index-impl');
 		});
 
 		it('foo is required 2 times', function () {
