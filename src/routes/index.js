@@ -1,5 +1,6 @@
 // const DeviceLoader = require('./device-loader');
 const database = require('../database/database-sequelize');
+const gcm = require('../gcm/gcm-sender');
 // const winston = require('winston');
 //const gcmSender = require('./gcm-sender');
 //const impl = require('./index-impl');
@@ -80,5 +81,9 @@ module.exports = {
      */
     deleteDevice: function (id, okHandler, errorHandler) {
         database.deleteDevice(id, okHandler, errorHandler);
-    }
+    },
+
+    ping: function (gcmToken, okHandler, errorHandler) {
+        gcm.ping(gcmToken, okHandler, errorHandler);
+    },
 };

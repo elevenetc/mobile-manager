@@ -15,6 +15,15 @@ server.get('/echo/:name', function (req, res, next) {
     return next();
 });
 
+server.post('/ping/:gcmToken', function (req, res, next) {
+    router.ping(req.params.gcmToken, function (devices) {
+        res.send(devices);
+    }, function (error) {
+        res.send(error);
+    });
+    return next();
+});
+
 server.post('/devices', function (req, res, next) {
     router.postDevices(req.body, function (devices) {
         res.send(devices);
