@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www",
+    "start": "node ./src/app.js",
     "test": "./node_modules/mocha/bin/mocha"
   },
   "dependencies": {
@@ -16,6 +16,7 @@
     "morgan": "~1.7.0",
     "mysql": "^2.11.1",
     "node-gcm": "^0.14.4",
+    "restify": "^4.2.0",
     "sequelize": "^3.24.1",
     "serve-favicon": "~2.3.0",
     "sinon": "^1.17.5",
