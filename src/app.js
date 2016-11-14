@@ -22,6 +22,16 @@ server.post('/ping/:gcmToken', function (req, res, next) {
 
     router.ping(req.params.gcmToken, function () {
         pingMap[deviceId] = res;
+
+        setTimeout(function () {
+
+            if (pingMap.hasOwnProperty(deviceId)) {
+                pingMap[deviceId].send({online: false});
+                delete pingMap[deviceId];
+            }
+
+        }, 3000);
+
     }, function (error) {
         res.send(error);
     });
@@ -33,6 +43,7 @@ server.post('/pong/:deviceId', function (req, res, next) {
 
     if (pingMap.hasOwnProperty(deviceId)) {
         pingMap[deviceId].send({online: true});
+        delete pingMap[deviceId];
     }
 
     res.send({});
