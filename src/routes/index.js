@@ -85,5 +85,5 @@ module.exports = {
 
     ping: function (gcmToken, okHandler, errorHandler) {
         gcm.ping(gcmToken, okHandler, errorHandler);
-    },
+    }
 };

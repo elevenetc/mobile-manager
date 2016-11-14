@@ -6,6 +6,8 @@ const server = restify.createServer({
     version: '0.0.1'
 });
 
+const pingMap = {};
+
 server.use(restify.acceptParser(server.acceptable));
 server.use(restify.queryParser());
 server.use(restify.bodyParser());
@@ -16,11 +18,24 @@ server.get('/echo/:name', function (req, res, next) {
 });
 
 server.post('/ping/:gcmToken', function (req, res, next) {
-    router.ping(req.params.gcmToken, function (devices) {
-        res.send(devices);
+    const deviceId = req.params['deviceId'];
+
+    router.ping(req.params.gcmToken, function () {
+        pingMap[deviceId] = res;
     }, function (error) {
         res.send(error);
     });
+    return next();
+});
+
+server.post('/pong/:deviceId', function (req, res, next) {
+    const deviceId = req.params.deviceId;
+
+    if (pingMap.hasOwnProperty(deviceId)) {
+        pingMap[deviceId].send({online: true});
+    }
+
+    res.send({});
     return next();
 });
 
