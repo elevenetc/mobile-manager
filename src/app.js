@@ -1,5 +1,6 @@
 const restify = require('restify');
 const router = require('./routes/index');
+const localSettins = require('../local-settings');
 
 const server = restify.createServer({
     name: 'device-manager',
@@ -17,6 +18,8 @@ server.get('/echo/:name', function (req, res, next) {
     return next();
 });
 
+
+//TODO: should send only deviceId, token already in db
 server.post('/ping/:gcmToken', function (req, res, next) {
     const deviceId = req.params['deviceId'];
 
@@ -78,6 +81,6 @@ server.del('/devices/:id', function (req, res, next) {
     return next();
 });
 
-server.listen(8080, function () {
+server.listen(localSettins.port, function () {
     console.log('%s listening at %s', server.name, server.url);
 });
