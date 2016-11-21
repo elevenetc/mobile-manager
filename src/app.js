@@ -1,4 +1,5 @@
 const restify = require('restify');
+const logger  = require('morgan');
 const router = require('./routes/index');
 const localSettins = require('../local-settings');
 
@@ -9,6 +10,7 @@ const server = restify.createServer({
 
 const pingMap = {};
 
+server.use(logger('dev'));
 server.use(restify.acceptParser(server.acceptable));
 server.use(restify.queryParser());
 server.use(restify.bodyParser());
