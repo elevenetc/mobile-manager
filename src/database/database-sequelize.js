@@ -45,6 +45,10 @@ class DatabaseSequelize extends Database {
         });
     }
 
+    updateLocation(deviceId, lat, lon, okHandler, failHandler) {
+        this.internalUpdate({deviceId: deviceId, lat: lat, lon: lon}, okHandler, failHandler);
+    }
+
     /**
      * @param device {Device}
      * @param okHandler {Function}
@@ -89,6 +93,7 @@ class DatabaseSequelize extends Database {
             where: {deviceId: device.deviceId}
         }).then(function (found) {
             if (!found) {
+                device.lastUpdateTime = new Date().getTime();
                 db.internalCreate(device, okHandler, failHandler);
             } else {
                 db.internalUpdate(device, okHandler, failHandler)

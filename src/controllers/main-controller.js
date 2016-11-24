@@ -7,10 +7,13 @@ module.exports = {
         database.getDevices(okHandler, errorHandler);
     },
 
-    /**
-     * @param device {Device}
-     */
-    postDevices: function (device, okHandler, errorHandler) {
+    updateLocation: function(deviceId, lat, lon, okHandler, errorHandler){
+        database.updateLocation(deviceId, lat, lon, okHandler, errorHandler);
+    },
+
+    postDevice: function (device, okHandler, errorHandler) {
+        okHandler = okHandler || function(){};
+        errorHandler = errorHandler || function(){};
         database.createOrUpdate(device, okHandler, errorHandler);
     },
 

@@ -1,6 +1,6 @@
 const restify = require('restify');
 const logger = require('morgan');
-const router = require('./routes/index');
+const controller = require('./controllers/main-controller');
 const localSettings = require('../local-settings');
 
 const server = restify.createServer({
@@ -25,7 +25,7 @@ server.get('/echo/:name', function (req, res, next) {
 server.post('/ping/:gcmToken', function (req, res, next) {
     const deviceId = req.params['deviceId'];
 
-    router.ping(req.params.gcmToken, function () {
+    controller.ping(req.params.gcmToken, function () {
         pingMap[deviceId] = res;
 
         setTimeout(function () {
@@ -43,6 +43,21 @@ server.post('/ping/:gcmToken', function (req, res, next) {
     return next();
 });
 
+server.post('/location/:deviceId', function (req, res, next) {
+    const deviceId = req.params.deviceId;
+    const lat = req.query.lat;
+    const lon = req.query.lon;
+
+    controller.updateLocation(deviceId, lat, lon, function () {
+        console.log('loc:ok');
+    }, function () {
+        console.log('loc:error');
+    });
+
+    res.send({});
+    return next();
+});
+
 server.post('/pong/:deviceId', function (req, res, next) {
     const deviceId = req.params.deviceId;
 
@@ -56,7 +71,7 @@ server.post('/pong/:deviceId', function (req, res, next) {
 });
 
 server.post('/devices', function (req, res, next) {
-    router.postDevices(req.body, function (devices) {
+    controller.postDevice(req.body, function (devices) {
         res.send(devices);
     }, function (error) {
         res.send(error);
@@ -65,7 +80,7 @@ server.post('/devices', function (req, res, next) {
 });
 
 server.get('/devices', function (req, res, next) {
-    router.getDevises(function (devices) {
+    controller.getDevises(function (devices) {
         res.send(devices);
     }, function (error) {
         res.send(error);
@@ -74,7 +89,7 @@ server.get('/devices', function (req, res, next) {
 });
 
 server.del('/devices/:id', function (req, res, next) {
-    router.deleteDevice(req.params.id, function (devices) {
+    controller.deleteDevice(req.params.id, function (devices) {
         res.send({deleted: devices});
     }, function (error) {
         console.log(error.stack);

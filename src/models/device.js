@@ -6,13 +6,13 @@ class Device {
     /**
      *
      * @param deviceId {String}
-     * @param gcmToken {String}
+     * @param pushToken {String}
      * @param manufacturer {String}
      * @param model {String}
      */
-    constructor(deviceId, gcmToken, manufacturer, model) {
+    constructor(deviceId, pushToken, manufacturer, model) {
         this.deviceId = deviceId;
-        this.gcmToken = gcmToken;
+        this.gcmToken = pushToken;
         this.manufacturer = manufacturer;
         this.model = model;
     }
