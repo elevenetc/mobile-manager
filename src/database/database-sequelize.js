@@ -24,10 +24,22 @@ class DatabaseSequelize extends Database {
         super();
         this.deviceModel = sequelize.define('devices', {
             deviceId: {type: Sequelize.STRING},
-            name: {type: Sequelize.STRING},
-            gcmToken: {type: Sequelize.STRING},
+            pushToken: {type: Sequelize.STRING},
             manufacturer: {type: Sequelize.STRING},
-            model: {type: Sequelize.STRING}
+            model: {type: Sequelize.STRING},
+            osVersion: {type: Sequelize.STRING},
+            wifiSSID: {type: Sequelize.STRING},
+            platform: {type: Sequelize.STRING},
+            screenWidth: {type: Sequelize.INTEGER},
+            screenHeight: {type: Sequelize.INTEGER},
+            hasNfc: {type: Sequelize.BOOLEAN},
+            hasBluetooth: {type: Sequelize.BOOLEAN},
+            hasBluetoothLowEnergy: {type: Sequelize.BOOLEAN},
+            hasFingerprintScanner: {type: Sequelize.BOOLEAN},
+            lat: {type: Sequelize.FLOAT},
+            lon: {type: Sequelize.FLOAT},
+            batteryLevel: {type: Sequelize.FLOAT},
+            lastUpdateTime: {type: Sequelize.DATE}
         }, {
             timestamps: false
         });
@@ -39,7 +51,6 @@ class DatabaseSequelize extends Database {
      * @param failHandler {Function}
      */
     createOrUpdate(device, okHandler, failHandler) {
-
 
         if (!this.isDeviceValid(device)) {
             failHandler(new Error(ERROR.DeviceIsNotValid));

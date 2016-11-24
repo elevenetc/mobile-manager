@@ -1,7 +1,7 @@
 const restify = require('restify');
-const logger  = require('morgan');
+const logger = require('morgan');
 const router = require('./routes/index');
-const localSettins = require('../local-settings');
+const localSettings = require('../local-settings');
 
 const server = restify.createServer({
     name: 'device-manager',
@@ -35,7 +35,7 @@ server.post('/ping/:gcmToken', function (req, res, next) {
                 delete pingMap[deviceId];
             }
 
-        }, 3000);
+        }, localSettings.pingTimeout);
 
     }, function (error) {
         res.send(error);
@@ -83,6 +83,6 @@ server.del('/devices/:id', function (req, res, next) {
     return next();
 });
 
-server.listen(localSettins.port, function () {
+server.listen(localSettings.port, function () {
     console.log('%s listening at %s', server.name, server.url);
 });
