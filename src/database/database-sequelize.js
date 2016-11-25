@@ -32,6 +32,7 @@ class DatabaseSequelize extends Database {
             platform: {type: Sequelize.STRING},
             screenWidth: {type: Sequelize.INTEGER},
             screenHeight: {type: Sequelize.INTEGER},
+            screenSize: {type: Sequelize.FLOAT},
             hasNfc: {type: Sequelize.BOOLEAN},
             hasBluetooth: {type: Sequelize.BOOLEAN},
             hasBluetoothLowEnergy: {type: Sequelize.BOOLEAN},
@@ -39,14 +40,19 @@ class DatabaseSequelize extends Database {
             lat: {type: Sequelize.FLOAT},
             lon: {type: Sequelize.FLOAT},
             batteryLevel: {type: Sequelize.FLOAT},
-            lastUpdateTime: {type: Sequelize.DATE}
+            lastUpdateTime: {type: Sequelize.DATE},
+            isOnline: {type: Sequelize.BOOLEAN}
         }, {
             timestamps: false
         });
     }
 
-    updateLocation(deviceId, lat, lon, okHandler, failHandler) {
-        this.internalUpdate({deviceId: deviceId, lat: lat, lon: lon}, okHandler, failHandler);
+    updateOnlineState(device, okHandler, failHandler) {
+        this.internalUpdate(device, okHandler, failHandler);
+    }
+
+    updateLocation(device, okHandler, failHandler) {
+        this.internalUpdate(device, okHandler, failHandler);
     }
 
     /**
@@ -55,6 +61,8 @@ class DatabaseSequelize extends Database {
      * @param failHandler {Function}
      */
     createOrUpdate(device, okHandler, failHandler) {
+
+
 
         if (!this.isDeviceValid(device)) {
             failHandler(new Error(ERROR.DeviceIsNotValid));

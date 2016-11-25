@@ -20,7 +20,6 @@ server.get('/echo/:name', function (req, res, next) {
     return next();
 });
 
-
 //TODO: should send only deviceId, token already in db
 server.post('/ping/:gcmToken', function (req, res, next) {
     const deviceId = req.params['deviceId'];
@@ -40,6 +39,20 @@ server.post('/ping/:gcmToken', function (req, res, next) {
     }, function (error) {
         res.send(error);
     });
+    return next();
+});
+
+server.post('/online/:deviceId', function (req, res, next) {
+    const deviceId = req.params.deviceId;
+    const isOnline = req.query.isOnline;
+
+    controller.updateOnlineState(deviceId, isOnline, function () {
+        console.log('isOnline:ok');
+    }, function () {
+        console.log('isOnline:error');
+    });
+
+    res.send({});
     return next();
 });
 
