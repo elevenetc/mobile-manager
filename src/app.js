@@ -8,37 +8,45 @@ const server = restify.createServer({
     version: '0.0.1'
 });
 
-const pingMap = {};
-
 server.use(logger('dev'));
 server.use(restify.acceptParser(server.acceptable));
 server.use(restify.queryParser());
 server.use(restify.bodyParser());
 
-server.get('/echo/:name', function (req, res, next) {
-    res.send(req.params);
-    return next();
-});
+let devicesWaitingList = [];
 
-//TODO: should send only deviceId, token already in db
-server.post('/ping/:gcmToken', function (req, res, next) {
-    const deviceId = req.params['deviceId'];
+server.post('/ping', function (req, res, next) {
+    //const deviceId = req.params['deviceId'];
 
-    controller.ping(req.params.gcmToken, function () {
-        pingMap[deviceId] = res;
 
-        setTimeout(function () {
+    controller.getDevises(function (devices) {
 
-            if (pingMap.hasOwnProperty(deviceId)) {
-                pingMap[deviceId].send({online: false});
-                delete pingMap[deviceId];
-            }
+        console.log('ping devices', devices);
 
-        }, localSettings.pingTimeout);
+        //set offline devices
+        for (let i = 0; i < devicesWaitingList.length; i++) {
+            console.log('not online', devicesWaitingList[i].deviceId);
+            controller.updateOnlineState(devicesWaitingList[i].deviceId, false);
+        }
+
+        let pushTokens = [];
+        devicesWaitingList = devices;
+
+        for (let i = 0; i < devices.length; i++) {
+            let pushToken = devices[i].pushToken;
+            pushTokens.push(pushToken);
+        }
+
+        controller.ping(pushTokens, function () {
+            res.send({});
+        }, function (error) {
+            res.send(error);
+        });
 
     }, function (error) {
         res.send(error);
     });
+
     return next();
 });
 
@@ -84,6 +92,13 @@ server.post('/pong/:deviceId', function (req, res, next) {
 });
 
 server.post('/devices', function (req, res, next) {
+
+    for (let i = devicesWaitingList.length - 1; i >= 0; i--) {
+        let deleteValue = false;
+        if (devicesWaitingList[i].deviceId === req.body.deviceId) deleteValue = true;
+        if (deleteValue) devicesWaitingList.splice(i, 1);
+    }
+
     controller.postDevice(req.body, function (devices) {
         res.send(devices);
     }, function (error) {
@@ -113,4 +128,8 @@ server.del('/devices/:id', function (req, res, next) {
 
 server.listen(localSettings.port, function () {
     console.log('%s listening at %s', server.name, server.url);
+
+    // setInterval(function () {
+    //     console.log('!');
+    // }, 1000);
 });

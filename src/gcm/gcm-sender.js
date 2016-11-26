@@ -12,23 +12,18 @@ class GcmSender {
         console.log('GCM Created')
     }
 
-    /**
-     * @param gcmToken {String}
-     * @param okHandler {Function}
-     * @param failHandler {Function}
-     */
-    ping(gcmToken, okHandler, failHandler) {
-        this.internalPing(gcmToken, okHandler, failHandler);
+    ping(pushTokens, okHandler, failHandler) {
+        this.internalPing(pushTokens, okHandler, failHandler);
     }
 
-    internalPing(token, okHandler, failHandler) {
+    internalPing(tokens, okHandler, failHandler) {
         console.log('internal ping');
 
         var message = new GCM.Message({
             data: {command: 'ping'}
         });
 
-        sender.send(message, {registrationTokens: [token]}, function (err, response) {
+        sender.send(message, {registrationTokens: tokens}, function (err, response) {
             if (err) {
                 failHandler({err: err, resp: response});
             } else {

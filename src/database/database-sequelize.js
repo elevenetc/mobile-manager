@@ -16,7 +16,7 @@ const sequelize = new Sequelize(
     }
 );
 
-sequelize.sync({force: true});
+//sequelize.sync({force: true});
 
 class DatabaseSequelize extends Database {
 
@@ -47,6 +47,12 @@ class DatabaseSequelize extends Database {
         });
     }
 
+    getPushToken(deviceId, okHandler, failHandler) {
+        this.getDevice(deviceId, function (device) {
+            okHandler(device.pushToken);
+        }, failHandler);
+    }
+
     updateOnlineState(device, okHandler, failHandler) {
         this.internalUpdate(device, okHandler, failHandler);
     }
@@ -62,8 +68,6 @@ class DatabaseSequelize extends Database {
      */
     createOrUpdate(device, okHandler, failHandler) {
 
-
-
         if (!this.isDeviceValid(device)) {
             failHandler(new Error(ERROR.DeviceIsNotValid));
         } else {
@@ -73,17 +77,17 @@ class DatabaseSequelize extends Database {
     }
 
     /**
-     * @param id {String}
-     * @param handler {Function}
+     * @param deviceId {String}
+     * @param okHandler {Function}
      */
-    getDevice(id, handler) {
+    getDevice(deviceId, okHandler, failHandler) {
         this.deviceModel.findOne({
             where: {
-                deviceId: id
+                deviceId: deviceId
             }
         }).then(function (device) {
-            handler(device);
-        });
+            okHandler(device);
+        }).catch(failHandler);
     }
 
     getDevices(dataHandler, errorHandler) {

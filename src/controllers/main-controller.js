@@ -8,6 +8,8 @@ module.exports = {
     },
 
     updateOnlineState: function(deviceId, isOnline, okHandler, errorHandler){
+        okHandler = okHandler || function(){};
+        errorHandler = errorHandler || function(){};
         database.updateOnlineState({deviceId: deviceId, isOnline: isOnline}, okHandler, errorHandler);
     },
 
@@ -22,14 +24,13 @@ module.exports = {
         database.createOrUpdate(device, okHandler, errorHandler);
     },
 
-    /**
-     * @param id {String}
-     */
     deleteDevice: function (id, okHandler, errorHandler) {
         database.deleteDevice(id, okHandler, errorHandler);
     },
 
-    ping: function (gcmToken, okHandler, errorHandler) {
-        gcm.ping(gcmToken, okHandler, errorHandler);
+    ping: function (pushTokens, okHandler, errorHandler) {
+        gcm.ping(pushTokens, function(){
+            okHandler();
+        }, errorHandler);
     }
 };
