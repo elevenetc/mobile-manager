@@ -13,28 +13,15 @@ server.use(restify.acceptParser(server.acceptable));
 server.use(restify.queryParser());
 server.use(restify.bodyParser());
 
-let devicesWaitingList = [];
-
 server.post('/ping', function (req, res, next) {
-    //const deviceId = req.params['deviceId'];
-
 
     controller.getDevises(function (devices) {
 
-        console.log('ping devices', devices);
-
-        //set offline devices
-        for (let i = 0; i < devicesWaitingList.length; i++) {
-            console.log('not online', devicesWaitingList[i].deviceId);
-            controller.updateOnlineState(devicesWaitingList[i].deviceId, false);
-        }
-
         let pushTokens = [];
-        devicesWaitingList = devices;
 
         for (let i = 0; i < devices.length; i++) {
-            let pushToken = devices[i].pushToken;
-            pushTokens.push(pushToken);
+            pushTokens.push(devices[i].pushToken);
+            controller.updateOnlineState(devices[i].deviceId, false);
         }
 
         controller.ping(pushTokens, function () {
@@ -93,11 +80,7 @@ server.post('/pong/:deviceId', function (req, res, next) {
 
 server.post('/devices', function (req, res, next) {
 
-    for (let i = devicesWaitingList.length - 1; i >= 0; i--) {
-        let deleteValue = false;
-        if (devicesWaitingList[i].deviceId === req.body.deviceId) deleteValue = true;
-        if (deleteValue) devicesWaitingList.splice(i, 1);
-    }
+    console.log('post device', req.body.deviceId);
 
     controller.postDevice(req.body, function (devices) {
         res.send(devices);
