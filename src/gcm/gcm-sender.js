@@ -17,9 +17,9 @@ class GcmSender {
     }
 
     internalPing(tokens, okHandler, failHandler) {
-        console.log('internal ping');
 
         var message = new GCM.Message({
+            timeToLive: 10,
             data: {command: 'ping'}
         });
 
