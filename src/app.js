@@ -15,25 +15,11 @@ server.use(restify.bodyParser());
 
 server.post('/ping', function (req, res, next) {
 
-    controller.getDevises(function (devices) {
-
-        let pushTokens = [];
-
-        for (let i = 0; i < devices.length; i++) {
-            pushTokens.push(devices[i].pushToken);
-            controller.updateOnlineState(devices[i].deviceId, false);
-        }
-
-        controller.ping(pushTokens, function () {
-            res.send({});
-        }, function (error) {
-            res.send(error);
-        });
-
+    pingDevices(function () {
+        res.send({});
     }, function (error) {
         res.send(error);
     });
-
     return next();
 });
 
@@ -110,9 +96,37 @@ server.del('/devices/:id', function (req, res, next) {
 });
 
 server.listen(localSettings.port, function () {
-    console.log('%s listening at %s', server.name, server.url);
+    console.log('%s listening at %s. Ping interval:%s', server.name, server.url, localSettings.pingTimeout);
 
-    // setInterval(function () {
-    //     console.log('!');
-    // }, 1000);
+    intervalPing();
+    setInterval(intervalPing, localSettings.pingTimeout);
 });
+
+function intervalPing() {
+    pingDevices(function () {
+        console.log('ping ok');
+    }, function (error) {
+        console.log('ping error: %s', error);
+    });
+}
+
+function pingDevices(okHandler, errorHandler) {
+    controller.getDevises(function (devices) {
+
+        let pushTokens = [];
+
+        for (let i = 0; i < devices.length; i++) {
+            pushTokens.push(devices[i].pushToken);
+            controller.updateOnlineState(devices[i].deviceId, false);
+        }
+
+        controller.ping(pushTokens, function () {
+            okHandler();
+        }, function (error) {
+            errorHandler(error);
+        });
+
+    }, function (error) {
+        errorHandler(error);
+    });
+}
