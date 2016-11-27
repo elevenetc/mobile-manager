@@ -16,7 +16,7 @@ const sequelize = new Sequelize(
     }
 );
 
-//sequelize.sync({force: true});
+sequelize.sync();
 
 class DatabaseSequelize extends Database {
 
