@@ -3,7 +3,6 @@
  */
 const localSettings = require('../../local-settings');
 const Sequelize = require('sequelize');
-const ERROR = require('../errors/error');
 const Database = require('./database');
 
 const sequelize = new Sequelize(
@@ -69,7 +68,7 @@ class DatabaseSequelize extends Database {
     createOrUpdate(device, okHandler, failHandler) {
 
         if (!this.isDeviceValid(device)) {
-            failHandler(new Error(ERROR.DeviceIsNotValid));
+            failHandler(new Error('device is not valid'));
         } else {
             this.internalCreateOrUpdate(device, okHandler, failHandler);
         }
