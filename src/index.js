@@ -2,6 +2,7 @@ const restify = require('restify');
 const logger = require('morgan');
 const DeviceManager = require('./managers/device-manager');
 const PingManager = require('./managers/ping-manager');
+const view = require('./view/view');
 
 class DM {
 
@@ -11,6 +12,9 @@ class DM {
 
     start() {
 
+        //TODO: check fields of config
+        //TODO: remove console.log
+        //TODO: add token check
         const config = this.config;
 
         const server = restify.createServer({
@@ -78,8 +82,11 @@ class DM {
         });
 
         server.get('/devices', function (req, res, next) {
+
+            let viewType = req.query.view;
+
             deviceManager.getDevices(function (devices) {
-                res.send(devices);
+                res.send(view.renderDevices(viewType, devices, false));
             }, function (error) {
                 res.send(error);
             });

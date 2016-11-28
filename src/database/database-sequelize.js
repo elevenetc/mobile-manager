@@ -3,15 +3,10 @@
  */
 
 const Sequelize = require('sequelize');
-const Database = require('./database');
 
-
-class DatabaseSequelize extends Database {
+class DatabaseSequelize{
 
     constructor(config) {
-        super();
-
-        console.log(config);
 
         const sequelize = new Sequelize(
             config.dbFile,

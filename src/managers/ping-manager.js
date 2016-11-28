@@ -1,4 +1,4 @@
-const GcmSender = require('../gcm/gcm-sender');
+const GcmSender = require('../cloud/gcm-sender');
 
 class PingManager {
 
