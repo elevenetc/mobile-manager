@@ -1,26 +1,30 @@
 /**
  * Created by eleven on 20/08/2016.
  */
-const localSettings = require('../../local-settings');
+
 const Sequelize = require('sequelize');
 const Database = require('./database');
 
-const sequelize = new Sequelize(
-    localSettings.dbFile,
-    localSettings.dbUser,
-    localSettings.dbPass,
-    {
-        host: 'localhost',
-        dialect: 'mysql'
-    }
-);
-
-sequelize.sync();
 
 class DatabaseSequelize extends Database {
 
-    constructor() {
+    constructor(config) {
         super();
+
+        console.log(config);
+
+        const sequelize = new Sequelize(
+            config.dbFile,
+            config.dbUser,
+            config.dbPass,
+            {
+                host: 'localhost',
+                dialect: 'mysql'
+            }
+        );
+
+        sequelize.sync();
+
         this.deviceModel = sequelize.define('devices', {
             deviceId: {type: Sequelize.STRING},
             pushToken: {type: Sequelize.STRING},
@@ -75,10 +79,6 @@ class DatabaseSequelize extends Database {
 
     }
 
-    /**
-     * @param deviceId {String}
-     * @param okHandler {Function}
-     */
     getDevice(deviceId, okHandler, failHandler) {
         this.deviceModel.findOne({
             where: {
@@ -135,4 +135,4 @@ class DatabaseSequelize extends Database {
     }
 }
 
-module.exports = new DatabaseSequelize();
+module.exports = DatabaseSequelize;

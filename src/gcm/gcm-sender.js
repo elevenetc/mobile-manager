@@ -3,13 +3,11 @@
  */
 
 const GCM = require('node-gcm');
-const config = require('../../local-settings');
-const sender = new GCM.Sender(config.gcmApiKey);
 
 class GcmSender {
 
-    constructor() {
-        console.log('GCM Created')
+    constructor(config) {
+        this.sender = new GCM.Sender(config.gcmApiKey);
     }
 
     ping(pushTokens, okHandler, failHandler) {
@@ -18,12 +16,12 @@ class GcmSender {
 
     internalPing(tokens, okHandler, failHandler) {
 
-        var message = new GCM.Message({
+        const message = new GCM.Message({
             timeToLive: 10,
             data: {command: 'ping'}
         });
 
-        sender.send(message, {registrationTokens: tokens}, function (err, response) {
+        this.sender.send(message, {registrationTokens: tokens}, function (err, response) {
             if (err) {
                 failHandler({err: err, resp: response});
             } else {
@@ -34,4 +32,4 @@ class GcmSender {
     }
 }
 
-module.exports = new GcmSender();
+module.exports = GcmSender;
