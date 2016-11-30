@@ -9,8 +9,8 @@ class PingManager {
     }
 
     start() {
-        this.intervalPing();
-        setInterval(this.intervalPing, this.config.pingTimeout);
+        this.intervalPing(this);
+        setInterval(this.intervalPing.bind(this), this.config.pingTimeout);
     }
 
     pingDevices(okHandler, errorHandler) {
@@ -42,7 +42,7 @@ class PingManager {
         }, errorHandler);
     }
 
-    intervalPing() {
+    intervalPing(self) {
         this.pingDevices(function () {
             console.log('ping ok');
         }, function (error) {
