@@ -42,7 +42,7 @@ class PingManager {
         }, errorHandler);
     }
 
-    intervalPing(self) {
+    intervalPing() {
         this.pingDevices(function () {
             console.log('ping ok');
         }, function (error) {

@@ -59,11 +59,6 @@ class DatabaseSequelize{
         this.internalUpdate(device, okHandler, failHandler);
     }
 
-    /**
-     * @param device {Device}
-     * @param okHandler {Function}
-     * @param failHandler {Function}
-     */
     createOrUpdate(device, okHandler, failHandler) {
 
         if (!this.isDeviceValid(device)) {

@@ -3,16 +3,22 @@ const logger = require('morgan');
 const DeviceManager = require('./managers/device-manager');
 const PingManager = require('./managers/ping-manager');
 const view = require('./view/view');
+const utils = require('./utils/utils');
 
 class DM {
 
     constructor(config) {
         this.config = config;
+        utils.checkNull(config, 'dbFile');
+        utils.checkNull(config, 'dbUser');
+        utils.checkNull(config, 'dbPass');
+        utils.checkNull(config, 'gcmApiKey');
+        utils.checkNull(config, 'port');
+        utils.checkNull(config, 'pingTimeout');
     }
 
     start() {
 
-        //TODO: check fields of config
         //TODO: remove console.log
         //TODO: add token check
         const config = this.config;
