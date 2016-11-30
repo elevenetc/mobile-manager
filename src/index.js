@@ -84,9 +84,10 @@ class DM {
         server.get('/devices', function (req, res, next) {
 
             let viewType = req.query.view;
+            let verbose = req.query.verbose;
 
             deviceManager.getDevices(function (devices) {
-                res.send(view.renderDevices(viewType, devices, false));
+                res.send(view.renderDevices(viewType, devices, verbose));
             }, function (error) {
                 res.send(error);
             });

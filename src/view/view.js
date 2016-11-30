@@ -1,17 +1,20 @@
 /**
  * Created by eugene.levenetc on 28/11/2016.
  */
-exports.renderDevices = function(type, devices, modeFull){
-    if(type === 'slack'){
-        return slack(devices, modeFull);
-    } else if(type === 'json'){
+
+const utils = require('../utils/utils');
+
+exports.renderDevices = function (type, devices, verbose) {
+    if (type === 'slack') {
+        return slack(devices, verbose);
+    } else if (type === 'json') {
         return devices;
     } else {
         return 'Invalid view type: ' + type;
     }
 };
 
-function slack(devices, modeFull) {
+function slack(devices, verbose) {
     let result = '';
     if (devices.length == 0) {
         result = 'No devices'
@@ -21,17 +24,45 @@ function slack(devices, modeFull) {
             let device = devices[i];
 
             let deviceId = device.deviceId;
-            let deviceName = device.manufacturer + ' ' + device.model;
+            let deviceName = utils.capitalize(device.manufacturer + ' ' + device.model);
             let osVersion = device.osVersion;
             let lat = device.lat;
             let lon = device.lon;
-            let location = '<https://www.google.com/maps/@' + lat + ',' + lon + ',18z|maps>';
+            let locAndDeviceName = '<https://www.google.com/maps/@' + lat + ',' + lon + ',18z|' + deviceName + '>';
+            let wifiSSID = device.wifiSSID;
+            let screenWidth = device.screenWidth;
+            let screenHeight = device.screenHeight;
+            let screenSize = device.screenSize;
+            let hasNfc = device.hasNfc;
+            let hasBluetooth = device.hasBluetooth;
+            let hasBluetoothLowEnergy = device.hasBluetoothLowEnergy;
+            let hasFingerprintScanner = device.hasFingerprintScanner;
+            let batteryLevel = device.batteryLevel;
+            let isOnline = device.isOnline ? ':new_moon:' : ':full_moon:';
 
-            if (modeFull) {
-                result += `name: ${deviceName} os: ${osVersion} location: ${location}\n`;
+            if (verbose) {
+                result +=
+                    locAndDeviceName +
+                    isOnline +
+                    `\`os: ${osVersion}\` ` +
+                    `\`battery: ${batteryLevel}\` ` +
+                    `\`fingerprint: ${hasFingerprintScanner}\` ` +
+                    `\`ble: ${hasBluetoothLowEnergy}\` ` +
+                    `\`bt: ${hasBluetooth}\` ` +
+                    `\`nfc: ${hasNfc}\` ` +
+                    `\`screenSize: ${screenSize}\` ` +
+                    `\`wifiSSID: ${wifiSSID}\` ` +
+                    `\`screenWidth: ${screenWidth}\` ` +
+                    `\`screenHeight: ${screenHeight}\` `;
             } else {
-                result += `name: ${deviceName} os: ${osVersion} location: ${location}\n`;
+                result +=
+                    locAndDeviceName +
+                    isOnline +
+                    `\`os: ${osVersion}\` ` +
+                    `\`battery: ${batteryLevel}\` `;
             }
+
+            result += '\n';
 
 
         }
