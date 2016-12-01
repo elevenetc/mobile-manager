@@ -6,6 +6,12 @@ exports.capitalize = function (str) {
 };
 
 exports.checkNull = function (obj, key) {
+    if (obj == null || obj == undefined)
+        throw new Error(`obj is undefined or null:${obj}`);
     if (!obj.hasOwnProperty(key) || obj[key] == null || obj[key] == undefined)
         throw new Error(`${key} is undefined`);
+};
+
+exports.isDefined = function (obj) {
+    return obj != null || obj != undefined;
 };

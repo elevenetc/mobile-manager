@@ -4,6 +4,12 @@
 
 const utils = require('../utils/utils');
 
+const boolFieldsMap = {
+    'ble': 'hasBluetoothLowEnergy',
+    'bt': 'hasBluetooth',
+    'nfc': 'hasNfc'
+};
+
 exports.renderDevices = function (type, devices, verbose) {
     if (type === 'slack') {
         return slack(devices, verbose);
@@ -14,7 +20,7 @@ exports.renderDevices = function (type, devices, verbose) {
     }
 };
 
-function slack(devices, verbose) {
+function slack(devices, verbose, filter) {
     let result = '';
     if (devices.length == 0) {
         result = 'No devices'
@@ -22,6 +28,7 @@ function slack(devices, verbose) {
         for (let i = 0; i < devices.length; i++) {
 
             let device = devices[i];
+            let skippedByFiler = false;
 
             let deviceId = device.deviceId;
             let deviceName = utils.capitalize(device.manufacturer + ' ' + device.model);
@@ -39,6 +46,21 @@ function slack(devices, verbose) {
             let hasFingerprintScanner = device.hasFingerprintScanner;
             let batteryLevel = device.batteryLevel;
             let isOnline = device.isOnline ? ':new_moon:' : ':full_moon:';
+
+            if (utils.isDefined(filter)) {
+                Object.keys(filter).forEach(function (key) {
+                    if (typeof filter[key] === 'boolean') {
+                        if (boolFieldsMap.hasOwnProperty(key)) {
+                            if (!this[boolFieldsMap[key]]) {
+                                skippedByFiler = true;
+                                break;
+                            }
+                        }
+                    }
+                });
+            }
+
+            if (skippedByFiler) continue;
 
             if (verbose) {
                 result +=

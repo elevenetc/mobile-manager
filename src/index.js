@@ -21,6 +21,8 @@ class DM {
 
         //TODO: remove console.log
         //TODO: add token check
+        //TODO: add filter
+        //TODO: add sort
         const config = this.config;
 
         const server = restify.createServer({
