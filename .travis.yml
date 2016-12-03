@@ -1,2 +1,5 @@
 language: node_js
 node_js: "6"
+addons:
+    code_climate:
+        repo_token: 5c0ca8356a4c188911c4df2bf7a582b77878c50f4e0153daf7ad761dd0601301
