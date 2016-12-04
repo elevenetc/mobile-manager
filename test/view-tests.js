@@ -11,6 +11,17 @@ describe('View utils', function () {
 
     });
 
+    it('undefined view type throws error', function () {
+        assert.throws(function(){
+            view.renderDevices([], 'x-type');
+        });
+    });
+
+    it('json view type', function () {
+        const devices = [{hasBluetoothLowEnergy: false}, {hasBluetoothLowEnergy: true}];
+        assert.deepEqual(view.renderDevices('json', devices), devices);
+    });
+
     it('with null filter should return same devices', function () {
         const devices = [{hasBluetoothLowEnergy: false}, {hasBluetoothLowEnergy: true}];
         const filtered = view.filterDevices(devices, null);

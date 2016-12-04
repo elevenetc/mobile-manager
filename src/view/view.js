@@ -11,13 +11,20 @@ const boolFieldsMap = {
     online: 'isOnline'
 };
 
+/**
+ *
+ * @param type
+ * @param devices
+ * @param [verbose]
+ * @return {*}
+ */
 exports.renderDevices = function (type, devices, verbose) {
     if (type === 'slack') {
         return slack(devices, verbose);
     } else if (type === 'json') {
         return devices;
     } else {
-        return `Invalid view type param: ${type}`;
+        throw new Error(`Invalid view type param: ${type}`);
     }
 };
 

@@ -13,5 +13,5 @@ exports.checkNull = function (obj, key) {
 };
 
 exports.isDefined = function (obj) {
-    return obj !== null || obj !== undefined;
+    return obj !== null && obj !== undefined;
 };

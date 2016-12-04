@@ -24,16 +24,16 @@ describe('Utils', function () {
     });
 
     it('First letter should be capital', function () {
-        assert.equal('Hello', utils.capitalize('hello'));
+        assert.equal(utils.capitalize('hello'), 'Hello');
     });
 
     it('Object should be defined', function () {
-        assert.equal(true, utils.isDefined({}));
-        assert.equal(true, utils.isDefined(''));
+        assert.equal(utils.isDefined({}), true);
+        assert.equal(utils.isDefined(''), true);
     });
 
     it('Object should not be defined', function () {
-        assert.equal(false, utils.isDefined(null));
-        assert.equal(false, utils.isDefined(undefined));
+        assert.equal(utils.isDefined(null), false);
+        assert.equal(utils.isDefined(undefined), false);
     });
 });
