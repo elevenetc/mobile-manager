@@ -5,7 +5,8 @@
   "scripts": {
     "start": "node ./src/app.js",
     "test": "mocha",
-    "cover": "istanbul cover _mocha"
+    "cover": "istanbul cover _mocha",
+    "test-cov": "istanbul cover _mocha"
   },
   "dependencies": {
     "body-parser": "~1.15.1",
