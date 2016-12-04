@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "node ./src/app.js",
-    "test": "./node_modules/mocha/bin/mocha"
+    "test": "mocha",
+    "cover": "istanbul cover _mocha"
   },
   "dependencies": {
     "body-parser": "~1.15.1",
@@ -21,5 +22,10 @@
     "serve-favicon": "~2.3.0",
     "sinon": "^1.17.5",
     "winston": "^2.2.0"
+  },
+  "devDependencies": {
+    "istanbul": "^0.4.5",
+    "mocha": "^3.2.0",
+    "mocha-lcov-reporter": "^1.2.0"
   }
 }
