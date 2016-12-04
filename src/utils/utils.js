@@ -15,3 +15,11 @@ exports.checkNull = function (obj, key) {
 exports.isDefined = function (obj) {
     return obj !== null && obj !== undefined;
 };
+
+exports.cloneArray = function (arr) {
+    return arr.slice();
+};
+
+exports.isNumber = function (n) {
+    return !isNaN(parseFloat(n)) && isFinite(n);
+};

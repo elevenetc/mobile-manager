@@ -11,6 +11,17 @@ const boolFieldsMap = {
     online: 'isOnline'
 };
 
+const stringFieldsMap = {
+    wifi: 'wifiSSID',
+    platform: 'platform',
+    model: 'model',
+    manufacturer: 'manufacturer'
+};
+
+const numericFieldsMap = {
+    battery: 'batteryLevel'
+};
+
 /**
  *
  * @param type
@@ -42,24 +53,40 @@ exports.filterDevices = function (devices, rawFilters) {
 
     if (filters.length === 0) return devices;
 
+    devices = utils.cloneArray(devices);
+
     for (let i = 0; i < filters.length; i++) {
         let d = devices.length;
         const fKey = filters[i].split(':')[0];
         const fValue = filters[i].split(':')[1];
         while (d--) {
 
+            let device = devices[d];
+
             if (boolFieldsMap.hasOwnProperty(fKey)) {
                 const devKey = boolFieldsMap[fKey];
-                const filterValue = Boolean(fValue);
-                let device = devices[d];
-                if (device.hasOwnProperty(devKey) && device[devKey] !== filterValue) {
+                const filterValue = fValue === 'true';
+
+                if (device[devKey] !== filterValue) {
                     devices.splice(d, 1);
-                    continue;
                 }
-            }
+            } else if (stringFieldsMap.hasOwnProperty(fKey)) {
+                const devKey = stringFieldsMap[fKey];
 
-            if (fKey === 'os') {
+                if (device[devKey].toLowerCase() !== fValue.toLowerCase()) {
+                    devices.splice(d, 1);
+                }
+            } else if (numericFieldsMap.hasOwnProperty(fKey)) {
+                const devKey = numericFieldsMap[fKey];
 
+                if (!isNumericFilterMatch(device[devKey], fValue)) {
+                    devices.splice(d, 1);
+                }
+
+            } else if (fKey === 'os' && isValidOsFilter(fValue)) {
+                if (!isOsMatch(device.osVersion, fValue)) {
+                    devices.splice(d, 1);
+                }
             }
         }
     }
@@ -67,7 +94,19 @@ exports.filterDevices = function (devices, rawFilters) {
     return devices;
 };
 
-exports.isMatch = function (dbVersion, filterPattern) {
+exports.isOsMatch = function (dbVersion, filterPattern) {
+    return isOsMatch(dbVersion, filterPattern);
+};
+
+exports.isValidOsFilter = function (filterPattern) {
+    return isValidOsFilter(filterPattern);
+};
+
+exports.fixDbVersion = fixDbVersion;
+exports.isNumericFilterMatch = isNumericFilterMatch;
+exports.fixNumericFilter = fixNumericFilter;
+
+function isOsMatch(dbVersion, filterPattern) {
     dbVersion = fixDbVersion(dbVersion);
     if (!utils.isDefined(filterPattern)) return false;
     if (filterPattern === '') return false;
@@ -76,10 +115,9 @@ exports.isMatch = function (dbVersion, filterPattern) {
     dbVersion = dbVersion.replace(/\./g, 'V');
     let result = dbVersion.match(regex);
     return result !== null;
-};
+}
 
-exports.isValidOsFilter = function (filterPattern) {
-
+function isValidOsFilter(filterPattern) {
     const aPattern = /^(\d|\*)$/;
     const abPattern = /^(\d|\*)\.(\d|\*)$/;
     const abcPattern = /^(\d|\*)\.(\d|\*)\.(\d|\*)$/;
@@ -97,9 +135,65 @@ exports.isValidOsFilter = function (filterPattern) {
     } else {
         return false;
     }
-};
+}
 
-exports.fixDbVersion = fixDbVersion;
+function isNumericFilterMatch(value, filter) {
+
+    if (!utils.isNumber(value)) return false;
+
+    filter = fixNumericFilter(filter);
+    if (filter === '') return false;
+    const sign = filter.charAt(0);
+    const filterValue = parseFloat(filter.slice(1));
+
+    //TODO: add support >= and <=
+    if (sign === '=') {
+        return value === filterValue;
+    } else if (sign === '>') {
+        return value > filterValue;
+    } else if (sign === '<') {
+        return value < filterValue;
+    } else {
+        return false;
+    }
+}
+
+function fixNumericFilter(filter) {
+
+    if (!utils.isDefined(filter)) return '';
+    if (filter.length == 0) return '';
+
+    //TODO: add negative values support
+    const validPattern = /^(>|<|=)(\d+\.\d+|\d+)$/;
+    const isValid = filter.match(validPattern);
+    if (isValid) {
+        return filter;
+    } else {
+        const sign = filter.charAt(0);
+        const hasSign = sign === '>' && sign === '<' && sign === '=';
+
+        if (hasSign && filter.length == 1) {
+            return '';
+        } else {
+
+            if (hasSign) {
+                const number = filter.slice(1);
+                if (utils.isNumber(number)) {
+                    return filter;
+                } else {
+                    return '';
+                }
+            } else {
+                if (utils.isNumber(filter)) {
+                    return '=' + filter;
+                } else {
+                    return '';
+                }
+            }
+
+        }
+    }
+}
 
 function fixDbVersion(ver) {
     if (ver.length === 1) {

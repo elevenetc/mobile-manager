@@ -36,4 +36,19 @@ describe('Utils', function () {
         assert.equal(utils.isDefined(null), false);
         assert.equal(utils.isDefined(undefined), false);
     });
+
+    it('Clone array', function () {
+        const array = [{x:'0'}, {y:'1'}];
+        assert.deepEqual(utils.cloneArray(array), array);
+    });
+
+    it('Is number', function () {
+       assert.equal(utils.isNumber(10), true);
+       assert.equal(utils.isNumber(1), true);
+       assert.equal(utils.isNumber(0), true);
+       assert.equal(utils.isNumber(-1), true);
+       assert.equal(utils.isNumber(50000), true);
+       assert.equal(utils.isNumber('b'), false);
+       assert.equal(utils.isNumber(), false);
+    });
 });

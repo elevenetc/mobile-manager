@@ -12,7 +12,7 @@ describe('View utils', function () {
     });
 
     it('undefined view type throws error', function () {
-        assert.throws(function(){
+        assert.throws(function () {
             view.renderDevices([], 'x-type');
         });
     });
@@ -46,6 +46,68 @@ describe('View utils', function () {
         assert.deepEqual(devices, filtered);
     });
 
+    it('filter out by os', function () {
+        assert.deepEqual(view.filterDevices([{osVersion: '6.0'}, {osVersion: '6.1'}], 'os:6.*'), [{osVersion: '6.0'}, {osVersion: '6.1'}]);
+        assert.deepEqual(view.filterDevices([{osVersion: '6.0'}, {osVersion: '6.1'}], 'os:6.*.0'), [{osVersion: '6.0'}, {osVersion: '6.1'}]);
+        assert.deepEqual(view.filterDevices([{osVersion: '6.0'}, {osVersion: '6.1'}], 'os:*.*'), [{osVersion: '6.0'}, {osVersion: '6.1'}]);
+        assert.deepEqual(view.filterDevices([{osVersion: '6.0'}, {osVersion: '6.1'}], 'os:*.1'), [{osVersion: '6.1'}]);
+        assert.deepEqual(view.filterDevices([{osVersion: '6.0'}, {osVersion: '6.1'}], 'os:6.1'), [{osVersion: '6.1'}]);
+        assert.deepEqual(view.filterDevices([{osVersion: '6.0'}, {osVersion: '6.1'}], 'os:7.*'), []);
+    });
+
+    it('Filter by wifi', function () {
+        assert.deepEqual(view.filterDevices([{wifiSSID: 'hello'}, {wifiSSID: 'bye'}], 'wifi:hello'), [{wifiSSID: 'hello'}]);
+    });
+
+    it('Filter by platform', function () {
+        assert.deepEqual(view.filterDevices([{platform: 'android'}, {platform: 'ios'}], 'platform:android'), [{platform: 'android'}]);
+    });
+
+    it('Filter by model', function () {
+        assert.deepEqual(view.filterDevices([{model: 'x'}, {model: 'y'}], 'model:x'), [{model: 'x'}]);
+    });
+
+    it('Filter by manufacturer', function () {
+        assert.deepEqual(view.filterDevices([{manufacturer: 'Samsung'}, {manufacturer: 'sony'}], 'manufacturer:samsung'), [{manufacturer: 'Samsung'}]);
+    });
+
+    it('Filter by battery level', function () {
+        assert.deepEqual(view.filterDevices([{batteryLevel: '50'}, {batteryLevel: '99'}], 'battery:>10'), [{batteryLevel: '50'}, {batteryLevel: '99'}]);
+        assert.deepEqual(view.filterDevices([{batteryLevel: '50'}, {batteryLevel: '99'}], 'battery:>90'), [{batteryLevel: '99'}]);
+        assert.deepEqual(view.filterDevices([{batteryLevel: '50'}, {batteryLevel: '99'}], 'battery:<10'), []);
+    });
+
+    it('Fix numeric filter', function () {
+        assert.equal(view.fixNumericFilter('>1'), '>1');
+        assert.equal(view.fixNumericFilter('>1.4'), '>1.4');
+        assert.equal(view.fixNumericFilter('>10'), '>10');
+        assert.equal(view.fixNumericFilter(), '');
+        assert.equal(view.fixNumericFilter(''), '');
+        assert.equal(view.fixNumericFilter('10'), '=10');
+        assert.equal(view.fixNumericFilter('10.5'), '=10.5');
+    });
+
+    it('Is numeric filter match', function () {
+        assert.equal(view.isNumericFilterMatch(10, '>9'), true);
+        assert.equal(view.isNumericFilterMatch(11, '>10'), true);
+        assert.equal(view.isNumericFilterMatch(10, '=10'), true);
+        assert.equal(view.isNumericFilterMatch(10.1, '=10.1'), true);
+    });
+
+    it('Filter by set of values', function () {
+        assert.deepEqual(
+            view.filterDevices(
+                [
+                    {manufacturer: 'Samsung', model: 'node4', wifiSSID: 'hello', osVersion: '6.7'},
+                    {manufacturer: 'Sony', model: 'xxx', wifiSSID: 'hello', osVersion: '6.7'},
+                    {manufacturer: 'Samsung', model: 'node4', wifiSSID: 'hello', osVersion: '5.7'},
+                ],
+                'manufacturer:samsung,os:6.*'
+            ),
+            [{manufacturer: 'Samsung', model: 'node4', wifiSSID: 'hello', osVersion: '6.7'}]
+        );
+    });
+
     it('test invalid os filters', function () {
         assert.equal(view.isValidOsFilter('6.b.0'), false);
         assert.equal(view.isValidOsFilter('6.*.x'), false);
@@ -75,25 +137,27 @@ describe('View utils', function () {
 
     it('all 6.* devices should filtered', function () {
 
-        assert.equal(view.isMatch('6', '6'), true);
-        assert.equal(view.isMatch('6', '*'), true);
-        assert.equal(view.isMatch('6', '6.*'), true);
+        assert.equal(view.isOsMatch('6', '6'), true);
+        assert.equal(view.isOsMatch('6', '*'), true);
+        assert.equal(view.isOsMatch('6', '6.*'), true);
 
-        assert.equal(view.isMatch('6.0', '*'), true);
-        assert.equal(view.isMatch('6.0', '6'), true);
-        assert.equal(view.isMatch('6.0', '6.'), true);
+        assert.equal(view.isOsMatch('6.0', '*'), true);
+        assert.equal(view.isOsMatch('6.0', '6'), true);
+        assert.equal(view.isOsMatch('6.0', '6.'), true);
 
-        assert.equal(view.isMatch('6.0.3', '*'), true);
-        assert.equal(view.isMatch('6.0.3', '6'), true);
-        assert.equal(view.isMatch('6.0.3', '6.*'), true);
-        assert.equal(view.isMatch('6.0.3', '6.*.*'), true);
-        assert.equal(view.isMatch('6.0.3', '6.*.3'), true);
-        assert.equal(view.isMatch('6.0.3', '6.0.3'), true);
+        assert.equal(view.isOsMatch('6.0.3', '*'), true);
+        assert.equal(view.isOsMatch('6.0.3', '6'), true);
+        assert.equal(view.isOsMatch('6.0.3', '6.*'), true);
+        assert.equal(view.isOsMatch('6.0.3', '6.*.*'), true);
+        assert.equal(view.isOsMatch('6.0.3', '6.*.3'), true);
+        assert.equal(view.isOsMatch('6.0.3', '6.0.3'), true);
     });
 
-    it('fix db version', function () {
+    it('fix db os version', function () {
         assert.equal(view.fixDbVersion('6'), '6.0.0');
         assert.equal(view.fixDbVersion('6.1'), '6.1.0');
         assert.equal(view.fixDbVersion('6.1.2'), '6.1.2');
     });
+
+
 });
