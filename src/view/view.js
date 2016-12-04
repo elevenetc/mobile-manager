@@ -33,7 +33,7 @@ exports.filterDevices = function (devices, rawFilters) {
 
     const filters = rawFilters.split(',');
 
-    if (filters.length == 0) return devices;
+    if (filters.length === 0) return devices;
 
     for (let i = 0; i < filters.length; i++) {
         let d = devices.length;
@@ -68,7 +68,7 @@ exports.isMatch = function (dbVersion, filterPattern) {
     const regex = new RegExp(filterPattern.replace(/\./g, 'V').replace(`\*`, '.{1,}'));
     dbVersion = dbVersion.replace(/\./g, 'V');
     let result = dbVersion.match(regex);
-    return result != null;
+    return result !== null;
 };
 
 exports.isValidOsFilter = function (filterPattern) {
@@ -81,11 +81,11 @@ exports.isValidOsFilter = function (filterPattern) {
     const checkAB = filterPattern.match(abPattern);
     const checkABC = filterPattern.match(abcPattern);
 
-    if (checkA != null) {
+    if (checkA !== null) {
         return true;
-    } else if (checkAB != null) {
+    } else if (checkAB !== null) {
         return true;
-    } else if (checkABC != null) {
+    } else if (checkABC !== null) {
         return true;
     } else {
         return false;
@@ -95,9 +95,9 @@ exports.isValidOsFilter = function (filterPattern) {
 exports.fixDbVersion = fixDbVersion;
 
 function fixDbVersion(ver) {
-    if (ver.length == 1) {
+    if (ver.length === 1) {
         return `${ver}.0.0`;
-    } else if (ver.length == 3) {
+    } else if (ver.length === 3) {
         return `${ver}.0`;
     } else {
         return ver;
@@ -106,7 +106,7 @@ function fixDbVersion(ver) {
 
 function slack(devices, verbose) {
     let result = '';
-    if (devices.length == 0) {
+    if (devices.length === 0) {
         result = 'No devices'
     } else {
         for (let i = 0; i < devices.length; i++) {

@@ -25,7 +25,7 @@ class GcmSender {
             if (err) {
                 failHandler({err: err, resp: response});
             } else {
-                if (response.failure == 0) okHandler();
+                if (response.failure === 0) okHandler();
                 else failHandler();
             }
         });
