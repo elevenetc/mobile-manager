@@ -5,5 +5,4 @@ addons:
         repo_token: 5c0ca8356a4c188911c4df2bf7a582b77878c50f4e0153daf7ad761dd0601301
 after_success:
   - istanbul cover _mocha
-  - bash <(curl -s https://codecov.io/bash)
-  - codeclimate-test-reporter < lcov.info
+  - codeclimate-test-reporter < coverage/lcov.info
