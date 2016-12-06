@@ -12,7 +12,8 @@ class DM {
         utils.checkNull(config, 'dbFile');
         utils.checkNull(config, 'dbUser');
         utils.checkNull(config, 'dbPass');
-        utils.checkNull(config, 'gcmApiKey');
+        utils.checkNull(config.keys, 'googleCloud');
+        utils.checkNull(config.keys, 'slack');
         utils.checkNull(config, 'port');
         utils.checkNull(config, 'pingTimeout');
     }
@@ -89,16 +90,23 @@ class DM {
             return next();
         });
 
-        server.get('/devices', function (req, res, next) {
+        server.get('/devices/slack', function (req, res, next) {
 
-            let viewType = req.query.view;
             let verbose = req.query.verbose;
+            let token = req.query.token;
+            let filters = req.query.text;
 
-            deviceManager.getDevices(function (devices) {
-                res.send(view.renderDevices(viewType, devices, verbose));
-            }, function (error) {
-                res.send(error);
-            });
+            if (token !== config.keys.slack) {
+                res.status(400);
+                res.send({error: 'Auth failed'});
+            } else {
+                deviceManager.getDevices(function (devices) {
+                    res.send(view.renderDevices('slack', devices, verbose, filters));
+                }, function (error) {
+                    res.send(error);
+                });
+            }
+
             return next();
         });
 

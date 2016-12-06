@@ -27,9 +27,11 @@ const numericFieldsMap = {
  * @param type
  * @param devices
  * @param [verbose]
+ * @param {String} [filters]
  * @return {*}
  */
-exports.renderDevices = function (type, devices, verbose) {
+exports.renderDevices = function (type, devices, verbose, filters) {
+    devices = filterDevices(devices, filters);
     if (type === 'slack') {
         return slack(devices, verbose);
     } else if (type === 'json') {
@@ -37,61 +39,6 @@ exports.renderDevices = function (type, devices, verbose) {
     } else {
         throw new Error(`Invalid view type param: ${type}`);
     }
-};
-
-/**
- *
- * @param devices
- * @param {string} [rawFilters]
- * @return {*}
- */
-exports.filterDevices = function (devices, rawFilters) {
-
-    if (!utils.isDefined(rawFilters)) return devices;
-
-    const filters = rawFilters.split(',');
-
-    if (filters.length === 0) return devices;
-
-    devices = utils.cloneArray(devices);
-
-    for (let i = 0; i < filters.length; i++) {
-        let d = devices.length;
-        const fKey = filters[i].split(':')[0];
-        const fValue = filters[i].split(':')[1];
-        while (d--) {
-
-            let device = devices[d];
-
-            if (boolFieldsMap.hasOwnProperty(fKey)) {
-                const devKey = boolFieldsMap[fKey];
-                const filterValue = fValue === 'true';
-
-                if (device[devKey] !== filterValue) {
-                    devices.splice(d, 1);
-                }
-            } else if (stringFieldsMap.hasOwnProperty(fKey)) {
-                const devKey = stringFieldsMap[fKey];
-
-                if (device[devKey].toLowerCase() !== fValue.toLowerCase()) {
-                    devices.splice(d, 1);
-                }
-            } else if (numericFieldsMap.hasOwnProperty(fKey)) {
-                const devKey = numericFieldsMap[fKey];
-
-                if (!isNumericFilterMatch(device[devKey], fValue)) {
-                    devices.splice(d, 1);
-                }
-
-            } else if (fKey === 'os' && isValidOsFilter(fValue)) {
-                if (!isOsMatch(device.osVersion, fValue)) {
-                    devices.splice(d, 1);
-                }
-            }
-        }
-    }
-
-    return devices;
 };
 
 exports.isOsMatch = function (dbVersion, filterPattern) {
@@ -102,6 +49,13 @@ exports.isValidOsFilter = function (filterPattern) {
     return isValidOsFilter(filterPattern);
 };
 
+/**
+ *
+ * @param devices
+ * @param {string} [rawFilters]
+ * @return {*}
+ */
+exports.filterDevices = filterDevices;
 exports.fixDbVersion = fixDbVersion;
 exports.isNumericFilterMatch = isNumericFilterMatch;
 exports.fixNumericFilter = fixNumericFilter;
@@ -261,3 +215,52 @@ function slack(devices, verbose) {
 
     return result;
 }
+
+function filterDevices(devices, rawFilters) {
+
+    if (!utils.isDefined(rawFilters)) return devices;
+
+    const filters = rawFilters.split(',');
+
+    if (filters.length === 0) return devices;
+
+    devices = utils.cloneArray(devices);
+
+    for (let i = 0; i < filters.length; i++) {
+        let d = devices.length;
+        const fKey = filters[i].split(':')[0];
+        const fValue = filters[i].split(':')[1];
+        while (d--) {
+
+            let device = devices[d];
+
+            if (boolFieldsMap.hasOwnProperty(fKey)) {
+                const devKey = boolFieldsMap[fKey];
+                const filterValue = fValue === 'true';
+
+                if (device[devKey] !== filterValue) {
+                    devices.splice(d, 1);
+                }
+            } else if (stringFieldsMap.hasOwnProperty(fKey)) {
+                const devKey = stringFieldsMap[fKey];
+
+                if (device[devKey].toLowerCase() !== fValue.toLowerCase()) {
+                    devices.splice(d, 1);
+                }
+            } else if (numericFieldsMap.hasOwnProperty(fKey)) {
+                const devKey = numericFieldsMap[fKey];
+
+                if (!isNumericFilterMatch(device[devKey], fValue)) {
+                    devices.splice(d, 1);
+                }
+
+            } else if (fKey === 'os' && isValidOsFilter(fValue)) {
+                if (!isOsMatch(device.osVersion, fValue)) {
+                    devices.splice(d, 1);
+                }
+            }
+        }
+    }
+
+    return devices;
+};

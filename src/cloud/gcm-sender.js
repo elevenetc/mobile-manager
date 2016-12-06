@@ -7,7 +7,7 @@ const GCM = require('node-gcm');
 class GcmSender {
 
     constructor(config) {
-        this.sender = new GCM.Sender(config.gcmApiKey);
+        this.sender = new GCM.Sender(config.keys.googleCloud);
     }
 
     ping(pushTokens, okHandler, failHandler) {
