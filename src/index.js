@@ -101,7 +101,7 @@ class DM {
                 res.send({error: 'Auth failed'});
             } else {
                 deviceManager.getDevices(function (devices) {
-                    res.send(view.renderDevices('slack', devices, verbose, filters));
+                    res.end(view.renderDevices('slack', devices, verbose, filters));
                 }, function (error) {
                     res.send(error);
                 });

@@ -166,6 +166,8 @@ function slack(devices, verbose) {
     } else {
         for (let i = 0; i < devices.length; i++) {
 
+            result += (i + 1) + '. ';
+
             let device = devices[i];
 
             let deviceId = device.deviceId;
@@ -183,7 +185,7 @@ function slack(devices, verbose) {
             let hasBluetoothLowEnergy = device.hasBluetoothLowEnergy;
             let hasFingerprintScanner = device.hasFingerprintScanner;
             let batteryLevel = device.batteryLevel;
-            let isOnline = device.isOnline ? ':new_moon:' : ':full_moon:';
+            let isOnline = device.isOnline ? ':full_moon:' : ':new_moon:';
 
             if (verbose) {
                 result +=
