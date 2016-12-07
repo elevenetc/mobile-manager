@@ -185,7 +185,7 @@ function slack(devices, verbose) {
             let hasBluetoothLowEnergy = device.hasBluetoothLowEnergy;
             let hasFingerprintScanner = device.hasFingerprintScanner;
             let batteryLevel = device.batteryLevel;
-            let isOnline = device.isOnline ? ':full_moon:' : ':new_moon:';
+            let isOnline = device.isOnline ? ' `on` ' : ' `off` ';
 
             if (verbose) {
                 result +=

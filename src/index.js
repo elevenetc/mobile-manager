@@ -21,9 +21,8 @@ class DM {
     start() {
 
         //TODO: remove console.log
-        //TODO: add token check
-        //TODO: add filter
         //TODO: add sort
+        //TODO: add header before devices(filter, amount of devices)
         const config = this.config;
 
         const server = restify.createServer({
@@ -118,6 +117,10 @@ class DM {
                 res.send(error);
             });
             return next();
+        });
+
+        server.on('uncaughtException', (req, res, route, err) => {
+            console.log(err);
         });
 
         server.listen(config.port, function () {
