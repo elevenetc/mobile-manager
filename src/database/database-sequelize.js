@@ -60,13 +60,7 @@ class DatabaseSequelize{
     }
 
     createOrUpdate(device, okHandler, failHandler) {
-
-        if (!this.isDeviceValid(device)) {
-            failHandler(new Error('device is not valid'));
-        } else {
-            this.internalCreateOrUpdate(device, okHandler, failHandler);
-        }
-
+        this.internalCreateOrUpdate(device, okHandler, failHandler);
     }
 
     getDevice(deviceId, okHandler, failHandler) {
