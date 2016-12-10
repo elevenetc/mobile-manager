@@ -160,6 +160,7 @@ function fixDbVersion(ver) {
 }
 
 function slack(devices, verbose, filters) {
+
     let result = 'Filters: `' + filters + '`\n';
     if (devices.length === 0) {
         result = 'No devices'
@@ -222,6 +223,7 @@ function filterDevices(devices, rawFilters) {
 
     if (!utils.isDefined(rawFilters)) return devices;
 
+    rawFilters = rawFilters.replace(/ /g, '');
     const filters = rawFilters.split(',');
 
     if (filters.length === 0) return devices;

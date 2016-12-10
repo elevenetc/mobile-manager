@@ -55,6 +55,10 @@ describe('View utils', function () {
         assert.deepEqual(view.filterDevices([{osVersion: '6.0'}, {osVersion: '6.1'}], 'os:7.*'), []);
     });
 
+    it('filter with space', function () {
+        assert.deepEqual(view.filterDevices([{osVersion: '6.0'}, {osVersion: '7.1'}], 'os: 7.*'), [{osVersion: '7.1'}]);
+    });
+
     it('Filter by wifi', function () {
         assert.deepEqual(view.filterDevices([{wifiSSID: 'hello'}, {wifiSSID: 'bye'}], 'wifi:hello'), [{wifiSSID: 'hello'}]);
     });
