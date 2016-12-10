@@ -33,7 +33,7 @@ const numericFieldsMap = {
 exports.renderDevices = function (type, devices, verbose, filters) {
     devices = filterDevices(devices, filters);
     if (type === 'slack') {
-        return slack(devices, verbose);
+        return slack(devices, verbose, filters);
     } else if (type === 'json') {
         return devices;
     } else {
@@ -159,8 +159,8 @@ function fixDbVersion(ver) {
     }
 }
 
-function slack(devices, verbose) {
-    let result = '';
+function slack(devices, verbose, filters) {
+    let result = 'Filters: `' + filters + '`\n';
     if (devices.length === 0) {
         result = 'No devices'
     } else {

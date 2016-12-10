@@ -21,8 +21,6 @@ class DM {
     start() {
 
         //TODO: remove console.log
-        //TODO: add sort
-        //TODO: add header before devices(filter, amount of devices)
         const config = this.config;
 
         const server = restify.createServer({
