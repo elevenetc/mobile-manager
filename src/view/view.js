@@ -194,8 +194,7 @@ function slack(devices, verbose, filters) {
         let isOnline = device.isOnline ? ' `on` ' : ' `off` ';
 
         let map = new OrderedMap();
-        map.put('os', osVersion);
-        map.put('battery', batteryLevel);
+
         map.put('fingerprint', hasFingerprintScanner);
         map.put('ble', hasBluetoothLowEnergy);
         map.put('bt', hasBluetooth);
@@ -205,7 +204,7 @@ function slack(devices, verbose, filters) {
         map.put('screenHeight', screenHeight);
         map.put('wifi', wifiSSID);
 
-        result += locAndDeviceName + isOnline;
+        result += locAndDeviceName + isOnline + `\`os: ${osVersion}\` battery: ${batteryLevel}% `;
 
         map.iterate(function (key, value) {
 
