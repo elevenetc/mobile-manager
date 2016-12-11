@@ -30,8 +30,9 @@ const numericFieldsMap = {
  * @param {String} [filters]
  * @return {*}
  */
-exports.renderDevices = function (type, devices, verbose, filters) {
+exports.renderDevices = function (type, devices, filters) {
     devices = filterDevices(devices, filters);
+    let verbose = utils.contains(filters, 'v:true');
     if (type === 'slack') {
         return slack(devices, verbose, filters);
     } else if (type === 'json') {
@@ -267,4 +268,4 @@ function filterDevices(devices, rawFilters) {
     }
 
     return devices;
-};
+}

@@ -23,3 +23,12 @@ exports.cloneArray = function (arr) {
 exports.isNumber = function (n) {
     return !isNaN(parseFloat(n)) && isFinite(n);
 };
+
+exports.isString = function (value) {
+    return typeof value === 'string' || value instanceof String;
+};
+
+exports.contains = function (str, value) {
+    if (!this.isString(str) || !this.isString(value)) return false;
+    return str.indexOf(value) >= 0;
+};

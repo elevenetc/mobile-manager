@@ -89,7 +89,6 @@ class DM {
 
         server.get('/devices/slack', function (req, res, next) {
 
-            let verbose = req.query.verbose;
             let token = req.query.token;
             let filters = req.query.text;
 
@@ -98,7 +97,7 @@ class DM {
                 res.send({error: 'Auth failed'});
             } else {
                 deviceManager.getDevices(function (devices) {
-                    res.end(view.renderDevices('slack', devices, verbose, filters));
+                    res.end(view.renderDevices('slack', devices, filters));
                 }, function (error) {
                     res.send(error);
                 });
