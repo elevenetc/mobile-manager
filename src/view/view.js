@@ -77,9 +77,9 @@ function isOsMatch(dbVersion, filterPattern) {
 }
 
 function isValidOsFilter(filterPattern) {
-    const aPattern = /^(\d|\*)$/;
-    const abPattern = /^(\d|\*)\.(\d|\*)$/;
-    const abcPattern = /^(\d|\*)\.(\d|\*)\.(\d|\*)$/;
+    const aPattern = /^([0-9]+)$|^\*$/;
+    const abPattern = /^(([0-9]+)|\*)\.(([0-9]+)|\*)$/;
+    const abcPattern = /^(([0-9]+)|\*)\.(([0-9]+)|\*)\.(([0-9]+)|\*)$/;
 
     const checkA = filterPattern.match(aPattern);
     const checkAB = filterPattern.match(abPattern);
@@ -167,58 +167,54 @@ function fixDbVersion(ver) {
 function slack(devices, verbose, filters) {
 
     let result = 'Filters: `' + filters + '`\n';
-    if (devices.length === 0) {
-        result += 'No devices'
-    } else {
-        for (let i = 0; i < devices.length; i++) {
+    result += 'Result: ' + devices.length + ' devices\n';
 
-            result += (i + 1) + '. ';
+    for (let i = 0; i < devices.length; i++) {
 
-            let device = devices[i];
+        result += (i + 1) + '. ';
 
-            let deviceId = device.deviceId;
-            let deviceName = utils.capitalize(device.manufacturer + ' ' + device.model);
-            let osVersion = device.osVersion;
-            let lat = device.lat;
-            let lon = device.lon;
-            let locAndDeviceName = '<https://www.google.com/maps/@' + lat + ',' + lon + ',18z|' + deviceName + '>';
-            let wifiSSID = device.wifiSSID;
-            let screenWidth = device.screenWidth;
-            let screenHeight = device.screenHeight;
-            let screenSize = device.screenSize;
-            let hasNfc = device.hasNfc;
-            let hasBluetooth = device.hasBluetooth;
-            let hasBluetoothLowEnergy = device.hasBluetoothLowEnergy;
-            let hasFingerprintScanner = device.hasFingerprintScanner;
-            let batteryLevel = device.batteryLevel;
-            let isOnline = device.isOnline ? ' `on` ' : ' `off` ';
+        let device = devices[i];
 
-            if (verbose) {
-                result +=
-                    locAndDeviceName +
-                    isOnline +
-                    `\`os: ${osVersion}\` ` +
-                    `\`battery: ${batteryLevel}\` ` +
-                    `\`fingerprint: ${hasFingerprintScanner}\` ` +
-                    `\`ble: ${hasBluetoothLowEnergy}\` ` +
-                    `\`bt: ${hasBluetooth}\` ` +
-                    `\`nfc: ${hasNfc}\` ` +
-                    `\`screenSize: ${screenSize}\` ` +
-                    `\`wifiSSID: ${wifiSSID}\` ` +
-                    `\`screenWidth: ${screenWidth}\` ` +
-                    `\`screenHeight: ${screenHeight}\` `;
-            } else {
-                result +=
-                    locAndDeviceName +
-                    isOnline +
-                    `\`os: ${osVersion}\` ` +
-                    `\`battery: ${batteryLevel}\` `;
-            }
+        let deviceId = device.deviceId;
+        let deviceName = utils.capitalize(device.manufacturer + ' ' + device.model);
+        let osVersion = device.osVersion;
+        let lat = device.lat;
+        let lon = device.lon;
+        let locAndDeviceName = '<https://www.google.com/maps/@' + lat + ',' + lon + ',18z|' + deviceName + '>';
+        let wifiSSID = device.wifiSSID;
+        let screenWidth = device.screenWidth;
+        let screenHeight = device.screenHeight;
+        let screenSize = device.screenSize;
+        let hasNfc = device.hasNfc;
+        let hasBluetooth = device.hasBluetooth;
+        let hasBluetoothLowEnergy = device.hasBluetoothLowEnergy;
+        let hasFingerprintScanner = device.hasFingerprintScanner;
+        let batteryLevel = device.batteryLevel;
+        let isOnline = device.isOnline ? ' `on` ' : ' `off` ';
 
-            result += '\n';
-
-
+        if (verbose) {
+            result +=
+                locAndDeviceName +
+                isOnline +
+                `\`os: ${osVersion}\` ` +
+                `\`battery: ${batteryLevel}\` ` +
+                `\`fingerprint: ${hasFingerprintScanner}\` ` +
+                `\`ble: ${hasBluetoothLowEnergy}\` ` +
+                `\`bt: ${hasBluetooth}\` ` +
+                `\`nfc: ${hasNfc}\` ` +
+                `\`screenSize: ${screenSize}\` ` +
+                `\`wifi: ${wifiSSID}\` ` +
+                `\`screenWidth: ${screenWidth}\` ` +
+                `\`screenHeight: ${screenHeight}\` `;
+        } else {
+            result +=
+                locAndDeviceName +
+                isOnline +
+                `\`os: ${osVersion}\` ` +
+                `\`battery: ${batteryLevel}\` `;
         }
+
+        result += '\n';
     }
 
     return result;

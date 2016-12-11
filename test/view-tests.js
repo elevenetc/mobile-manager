@@ -53,6 +53,7 @@ describe('View utils', function () {
         assert.deepEqual(view.filterDevices([{osVersion: '6.0'}, {osVersion: '6.1'}], 'os:*.1'), [{osVersion: '6.1'}]);
         assert.deepEqual(view.filterDevices([{osVersion: '6.0'}, {osVersion: '6.1'}], 'os:6.1'), [{osVersion: '6.1'}]);
         assert.deepEqual(view.filterDevices([{osVersion: '6.0'}, {osVersion: '6.1'}], 'os:7.*'), []);
+        assert.deepEqual(view.filterDevices([{osVersion: '6.0'}, {osVersion: '6.1'}], 'os:10'), []);
     });
 
     it('filter with space', function () {
@@ -117,7 +118,7 @@ describe('View utils', function () {
         assert.equal(view.isValidOsFilter('6.*.x'), false);
         assert.equal(view.isValidOsFilter('v.*.*'), false);
 
-        assert.equal(view.isValidOsFilter('660'), false);
+        assert.equal(view.isValidOsFilter('660'), true);
         assert.equal(view.isValidOsFilter('6c*'), false);
         assert.equal(view.isValidOsFilter('f'), false);
 
@@ -135,6 +136,7 @@ describe('View utils', function () {
         assert.equal(view.isValidOsFilter('6.*'), true);
         assert.equal(view.isValidOsFilter('*.*'), true);
 
+        assert.equal(view.isValidOsFilter('10'), true);
         assert.equal(view.isValidOsFilter('6'), true);
         assert.equal(view.isValidOsFilter('*'), true);
     });
