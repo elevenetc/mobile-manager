@@ -8,7 +8,8 @@ const boolFieldsMap = {
     ble: 'hasBluetoothLowEnergy',
     bt: 'hasBluetooth',
     nfc: 'hasNfc',
-    online: 'isOnline'
+    online: 'isOnline',
+    fingerprint: 'hasFingerprintScanner'
 };
 
 const stringFieldsMap = {
@@ -19,7 +20,10 @@ const stringFieldsMap = {
 };
 
 const numericFieldsMap = {
-    battery: 'batteryLevel'
+    battery: 'batteryLevel',
+    screenWidth: 'screenWidth',
+    screenHeight: 'screenHeight',
+    screenSize: 'screenSize'
 };
 
 /**
@@ -164,7 +168,7 @@ function slack(devices, verbose, filters) {
 
     let result = 'Filters: `' + filters + '`\n';
     if (devices.length === 0) {
-        result = 'No devices'
+        result += 'No devices'
     } else {
         for (let i = 0; i < devices.length; i++) {
 
