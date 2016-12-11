@@ -204,7 +204,7 @@ function slack(devices, verbose, filters) {
         map.put('screenHeight', screenHeight);
         map.put('wifi', wifiSSID);
 
-        result += locAndDeviceName + isOnline + `\`os: ${osVersion}\` battery: ${batteryLevel}% `;
+        result += locAndDeviceName + isOnline + `\`os: ${osVersion}\` \`battery: ${batteryLevel}%\` `;
 
         map.iterate(function (key, value) {
 
