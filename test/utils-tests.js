@@ -4,6 +4,7 @@
 const assert = require('assert');
 const sinon = require('sinon');
 const utils = require('../src/utils/utils');
+const OrderedMap = require('../src/utils/ordered-map');
 
 describe('Utils', function () {
 
@@ -72,4 +73,73 @@ describe('Utils', function () {
         assert.equal(utils.contains('xv:z', 'v:true'), false);
         assert.equal(utils.contains('xv:truez', 'v:true'), true);
     });
+
+    it('OrderedMap: Iterate', function () {
+
+        let orderedMap = new OrderedMap();
+        let keysArray = [];
+        let valuesArray = [];
+
+        orderedMap.put('a', 0);
+        orderedMap.put('b', 1);
+        orderedMap.put('c', 2);
+
+        orderedMap.iterate(function (key, value) {
+            keysArray.push(key);
+            valuesArray.push(value);
+        });
+
+        assert.deepEqual(keysArray, ['a', 'b', 'c']);
+        assert.deepEqual(valuesArray, [0, 1, 2]);
+    });
+
+    it('OrderedMap: get', function () {
+        let orderedMap = new OrderedMap();
+        orderedMap.put('a', 0);
+        orderedMap.put('b', 1);
+
+        assert.equal(orderedMap.get('b'), 1);
+        assert.equal(orderedMap.get('x'), null);
+    });
+
+    it('OrderedMap: indexOfValue', function () {
+        let orderedMap = new OrderedMap();
+        orderedMap.put('a', 0);
+        orderedMap.put('b', 1);
+
+        assert.equal(orderedMap.indexOfValue(0), 0);
+        assert.equal(orderedMap.indexOfValue(10), -1);
+    });
+
+    it('OrderedMap: indexOfKey', function () {
+        let orderedMap = new OrderedMap();
+        orderedMap.put('a', 0);
+        orderedMap.put('b', 1);
+
+        assert.equal(orderedMap.indexOfKey('b'), 1);
+        assert.equal(orderedMap.indexOfKey('x'), -1);
+    });
+
+    it('OrderedMap: remove', function () {
+        let orderedMap = new OrderedMap();
+
+        orderedMap.put('a', 0);
+        orderedMap.put('b', 1);
+        orderedMap.put('c', 2);
+
+        orderedMap.remove('b');
+
+        assert.equal(orderedMap.get('b'), null);
+        assert.equal(orderedMap.indexOfKey('b'), -1);
+        assert.equal(orderedMap.size(), 2);
+    });
+
+    it('OrderedMap: size', function () {
+        let orderedMap = new OrderedMap();
+        orderedMap.put('a', 0);
+        orderedMap.put('b', 1);
+
+        assert.equal(orderedMap.size(), 2);
+    });
+
 });
