@@ -3,6 +3,7 @@
  */
 
 const utils = require('../utils/utils');
+const OrderedMap = require('../utils/ordered-map');
 
 const boolFieldsMap = {
     ble: 'hasBluetoothLowEnergy',
@@ -192,27 +193,29 @@ function slack(devices, verbose, filters) {
         let batteryLevel = device.batteryLevel;
         let isOnline = device.isOnline ? ' `on` ' : ' `off` ';
 
-        if (verbose) {
-            result +=
-                locAndDeviceName +
-                isOnline +
-                `\`os: ${osVersion}\` ` +
-                `\`battery: ${batteryLevel}\` ` +
-                `\`fingerprint: ${hasFingerprintScanner}\` ` +
-                `\`ble: ${hasBluetoothLowEnergy}\` ` +
-                `\`bt: ${hasBluetooth}\` ` +
-                `\`nfc: ${hasNfc}\` ` +
-                `\`screenSize: ${screenSize}\` ` +
-                `\`wifi: ${wifiSSID}\` ` +
-                `\`screenWidth: ${screenWidth}\` ` +
-                `\`screenHeight: ${screenHeight}\` `;
-        } else {
-            result +=
-                locAndDeviceName +
-                isOnline +
-                `\`os: ${osVersion}\` ` +
-                `\`battery: ${batteryLevel}\` `;
-        }
+        let map = new OrderedMap();
+        map.put('os', osVersion);
+        map.put('battery', batteryLevel);
+        map.put('fingerprint', hasFingerprintScanner);
+        map.put('ble', hasBluetoothLowEnergy);
+        map.put('bt', hasBluetooth);
+        map.put('nfc', hasNfc);
+        map.put('screenSize', screenSize);
+        map.put('screenWidth', screenWidth);
+        map.put('screenHeight', screenHeight);
+        map.put('wifi', wifiSSID);
+
+        result += locAndDeviceName + isOnline;
+
+        map.iterate(function (key, value) {
+
+            if (verbose) {
+                result += `\`${key}: ${value}\` `;
+            } else {
+                if (filters.indexOf(key) >= 0) result += `\`${key}: ${value}\` `;
+            }
+
+        });
 
         result += '\n';
     }

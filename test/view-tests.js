@@ -165,5 +165,8 @@ describe('View utils', function () {
         assert.equal(view.fixDbVersion('6.1.2'), '6.1.2');
     });
 
+    it('Slack view', function () {
+        view.renderDevices('slack', []);
+    });
 
 });
