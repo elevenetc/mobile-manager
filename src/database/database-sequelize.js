@@ -98,7 +98,7 @@ class DatabaseSequelize{
 
     internalCreate(device, okHandler, failHandler) {
         this.deviceModel.create(device).then(function () {
-            okHandler(Database.CREATED);
+            okHandler();
         }).catch(failHandler);
     }
 
@@ -108,7 +108,7 @@ class DatabaseSequelize{
                 deviceId: device.deviceId
             }
         }).then(function () {
-            okHandler(Database.UPDATED);
+            okHandler();
         }).catch(failHandler);
     }
 
