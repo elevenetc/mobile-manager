@@ -79,8 +79,8 @@ class DM {
 
             console.log('post device', req.body.deviceId);
 
-            deviceManager.createOrUpdateDevice(req.body, function (devices) {
-                res.send(devices);
+            deviceManager.createOrUpdateDevice(req.body, function () {
+                res.send({});
             }, function (error) {
                 res.send(error);
             });
