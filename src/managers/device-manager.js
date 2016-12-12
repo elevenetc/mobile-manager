@@ -21,6 +21,7 @@ class DeviceManager {
     }
 
     createOrUpdateDevice (device, okHandler, errorHandler) {
+        //TODO: add device validation
         okHandler = okHandler || function(){};
         errorHandler = errorHandler || function(){};
         device.isOnline = true;
