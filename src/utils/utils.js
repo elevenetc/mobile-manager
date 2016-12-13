@@ -12,6 +12,14 @@ exports.checkNull = function (obj, key) {
         throw new Error(`${key} is undefined`);
 };
 
+exports.isPropDefined = function (obj, prop) {
+    if (!obj.hasOwnProperty(prop)) {
+        return false;
+    } else {
+        return obj[prop] !== null && obj[prop] !== undefined;
+    }
+};
+
 exports.isDefined = function (obj) {
     return obj !== null && obj !== undefined;
 };
@@ -31,4 +39,18 @@ exports.isString = function (value) {
 exports.contains = function (str, value) {
     if (!this.isString(str) || !this.isString(value)) return false;
     return str.indexOf(value) >= 0;
+};
+
+exports.isDeviceValid = function (device) {
+    if (!this.isDefined(device)) {
+        return false;
+    } else {
+        return this.isPropDefined(device, 'deviceId') &&
+            this.isPropDefined(device, 'pushToken') &&
+            this.isPropDefined(device, 'manufacturer') &&
+            this.isPropDefined(device, 'model') &&
+            this.isPropDefined(device, 'osVersion') &&
+            this.isPropDefined(device, 'platform') &&
+            this.isPropDefined(device, 'screenSize');
+    }
 };

@@ -1,4 +1,5 @@
 const DatabaseSequelize = require('../database/database-sequelize');
+const utils = require('../utils/utils');
 
 class DeviceManager {
 
@@ -21,9 +22,14 @@ class DeviceManager {
     }
 
     createOrUpdateDevice (device, okHandler, errorHandler) {
-        //TODO: add device validation
         okHandler = okHandler || function(){};
         errorHandler = errorHandler || function(){};
+
+        if(!utils.isDeviceValid(device)){
+            errorHandler.call({error:'device not valid', device: device});
+            return;
+        }
+
         device.isOnline = true;
         this.database.createOrUpdate(device, okHandler, errorHandler);
     }
@@ -31,8 +37,6 @@ class DeviceManager {
     deleteDevice (id, okHandler, errorHandler) {
         this.database.deleteDevice(id, okHandler, errorHandler);
     }
-
-
 }
 
 module.exports = DeviceManager;

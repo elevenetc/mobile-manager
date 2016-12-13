@@ -142,4 +142,23 @@ describe('Utils', function () {
         assert.equal(orderedMap.size(), 2);
     });
 
+    it('Is prop defined', function () {
+        assert.equal(utils.isPropDefined({a: 10}, 'a'), true);
+        assert.equal(utils.isPropDefined({a: null}, 'a'), false);
+        assert.equal(utils.isPropDefined({a: undefined}, 'a'), false);
+        assert.equal(utils.isPropDefined({}, 'a'), false);
+    });
+
+    it('Is device valid', function () {
+        assert.equal(utils.isDeviceValid({
+            deviceId: 1,
+            pushToken: 1,
+            manufacturer: 1,
+            model: 1,
+            osVersion: 1,
+            platform: 1,
+            screenSize: 1
+        }), true);
+    });
+
 });
