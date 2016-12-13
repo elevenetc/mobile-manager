@@ -12,9 +12,15 @@ describe('Utils', function () {
 
     });
 
-    it('checkNull should throw NPE', function () {
+    it('checkNull should throw NPE on empty filed', function () {
         assert.throws(function () {
             utils.checkNull({}, 'field');
+        });
+    });
+
+    it('checkNull should throw NPE on null object', function () {
+        assert.throws(function () {
+            utils.checkNull(null, 'field');
         });
     });
 

@@ -86,13 +86,18 @@ describe('View utils', function () {
         assert.equal(view.fixNumericFilter('>1'), '>1');
         assert.equal(view.fixNumericFilter('>1.4'), '>1.4');
         assert.equal(view.fixNumericFilter('>10'), '>10');
-        assert.equal(view.fixNumericFilter(), '');
-        assert.equal(view.fixNumericFilter(''), '');
         assert.equal(view.fixNumericFilter('10'), '=10');
         assert.equal(view.fixNumericFilter('10.5'), '=10.5');
+
+        assert.equal(view.fixNumericFilter('<'), '');
+        assert.equal(view.fixNumericFilter('>'), '');
+        assert.equal(view.fixNumericFilter('-'), '');
+        assert.equal(view.fixNumericFilter(), '');
+        assert.equal(view.fixNumericFilter('b'), '');
     });
 
     it('Is numeric filter match', function () {
+        assert.equal(view.isNumericFilterMatch(10, '>11'), false);
         assert.equal(view.isNumericFilterMatch(10, '>9'), true);
         assert.equal(view.isNumericFilterMatch(11, '>10'), true);
         assert.equal(view.isNumericFilterMatch(10, '=10'), true);
@@ -167,6 +172,9 @@ describe('View utils', function () {
 
     it('Slack view', function () {
         view.renderDevices('slack', []);
+        view.renderDevices('slack', [{
+
+        }]);
     });
 
 });
