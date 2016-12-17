@@ -1,4 +1,5 @@
 const GcmSender = require('../cloud/gcm-sender');
+const logger = require('../logger/logger');
 
 class PingManager {
 
@@ -18,7 +19,7 @@ class PingManager {
         const ref = this;
         dManager.getDevices(function (devices) {
 
-            let pushTokens = [];
+            const pushTokens = [];
 
             for (let i = 0; i < devices.length; i++) {
                 pushTokens.push(devices[i].pushToken);
@@ -44,9 +45,9 @@ class PingManager {
 
     intervalPing() {
         this.pingDevices(function () {
-            console.log('ping ok');
+            logger.info('ping ok');
         }, function (error) {
-            console.log('ping error: %s', error);
+            logger.error('ping error: %s', error);
         });
     }
 

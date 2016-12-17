@@ -3,6 +3,7 @@
  */
 
 const Sequelize = require('sequelize');
+const logger = require('../logger/logger').getInst();
 
 class DatabaseSequelize{
 
@@ -14,7 +15,8 @@ class DatabaseSequelize{
             config.dbPass,
             {
                 host: 'localhost',
-                dialect: 'mysql'
+                dialect: 'mysql',
+                logging: logger.debug.bind(logger)
             }
         );
 

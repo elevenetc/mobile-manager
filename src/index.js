@@ -1,9 +1,9 @@
 const restify = require('restify');
-const logger = require('morgan');
 const DeviceManager = require('./managers/device-manager');
 const PingManager = require('./managers/ping-manager');
 const view = require('./view/view');
 const utils = require('./utils/utils');
+const logger = require('./logger/logger');
 
 class DM {
 
@@ -16,22 +16,24 @@ class DM {
         utils.checkNull(config.keys, 'slack');
         utils.checkNull(config, 'port');
         utils.checkNull(config, 'pingTimeout');
+        utils.checkNull(config, 'logLevel');
+
+        logger.setLevel(config.logLevel);
     }
 
     start() {
 
-        //TODO: remove console.log
         const config = this.config;
 
         const server = restify.createServer({
             name: 'device-manager',
-            version: '0.0.1'
+            version: '0.0.1',
+            log: logger.getInst()
         });
 
         const deviceManager = new DeviceManager(config);
         const pingManager = new PingManager(deviceManager, config);
 
-        server.use(logger('dev'));
         server.use(restify.acceptParser(server.acceptable));
         server.use(restify.queryParser());
         server.use(restify.bodyParser());
@@ -41,19 +43,21 @@ class DM {
             pingManager.pingDevices(function () {
                 res.send({});
             }, function (error) {
+                logger.error(error);
                 res.send(error);
             });
             return next();
         });
 
         server.post('/online/:deviceId', function (req, res, next) {
+
             const deviceId = req.params.deviceId;
             const isOnline = req.query.isOnline;
 
             deviceManager.updateOnlineState(deviceId, isOnline, function () {
-                console.log('isOnline:ok');
+                logger.info('isOnline:ok');
             }, function () {
-                console.log('isOnline:error');
+                logger.info('isOnline:error');
             });
 
             res.send({});
@@ -66,9 +70,9 @@ class DM {
             const lon = req.query.lon;
 
             deviceManager.updateLocation(deviceId, lat, lon, function () {
-                console.log('loc:ok');
+                logger.info('loc:ok');
             }, function () {
-                console.log('loc:error');
+                logger.info('loc:error');
             });
 
             res.send({});
@@ -76,8 +80,6 @@ class DM {
         });
 
         server.post('/devices', function (req, res, next) {
-
-            console.log('post device', req.body.deviceId);
 
             deviceManager.createOrUpdateDevice(req.body, function () {
                 res.send({});
@@ -89,8 +91,8 @@ class DM {
 
         server.get('/devices/slack', function (req, res, next) {
 
-            let token = req.query.token;
-            let filters = req.query.text;
+            const token = req.query.token;
+            const filters = req.query.text;
 
             if (token !== config.keys.slack) {
                 res.status(400);
@@ -110,18 +112,23 @@ class DM {
             deviceManager.deleteDevice(req.params.id, function (devices) {
                 res.send({deleted: devices});
             }, function (error) {
-                console.log(error.stack);
+                logger.error(error.stack);
                 res.send(error);
             });
             return next();
         });
 
         server.on('uncaughtException', (req, res, route, err) => {
-            console.log(err);
+            logger.error(err);
+        });
+
+        server.pre(function (request, response, next) {
+            request.log.info({req: request}, 'start');
+            return next();
         });
 
         server.listen(config.port, function () {
-            console.log('%s listening at %s. Ping interval:%s', server.name, server.url, config.pingTimeout);
+            logger.info('%s listening at %s. Ping interval:%s', server.name, server.url, config.pingTimeout);
             pingManager.start();
         });
 

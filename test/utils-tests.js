@@ -153,11 +153,6 @@ describe('Utils', function () {
         orderedMap.put('a', 0);
         orderedMap.put('a', 1);
 
-        orderedMap.iterate(function(key, value){
-            console.log(key + ':'+ value);
-            console.log(key + ':'+ value);
-        });
-
         assert.equal(orderedMap.get('a'), 1);
         assert.equal(orderedMap.size(), 1);
     });
