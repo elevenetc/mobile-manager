@@ -1,7 +1,7 @@
 const restify = require('restify');
 const DeviceManager = require('./managers/device-manager');
 const PingManager = require('./managers/ping-manager');
-const view = require('./view/view');
+const view = require('./view/view-slack');
 const utils = require('./utils/utils');
 const logger = require('./logger/logger');
 
