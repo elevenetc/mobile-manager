@@ -31,7 +31,6 @@ const numericFieldsMap = {
  *
  * @param type
  * @param devices
- * @param [verbose]
  * @param {String} [filters]
  * @return {*}
  */
@@ -86,15 +85,7 @@ function isValidOsFilter(filterPattern) {
     const checkAB = filterPattern.match(abPattern);
     const checkABC = filterPattern.match(abcPattern);
 
-    if (checkA !== null) {
-        return true;
-    } else if (checkAB !== null) {
-        return true;
-    } else if (checkABC !== null) {
-        return true;
-    } else {
-        return false;
-    }
+    return checkA !== null || checkAB !== null || checkABC !== null;
 }
 
 function isNumericFilterMatch(value, filter) {
@@ -242,7 +233,7 @@ function filterDevices(devices, rawFilters) {
         const fValue = filters[i].split(':')[1];
         while (d--) {
 
-            let device = devices[d];
+            const device = devices[d];
 
             if (boolFieldsMap.hasOwnProperty(fKey)) {
                 const devKey = boolFieldsMap[fKey];
@@ -264,10 +255,8 @@ function filterDevices(devices, rawFilters) {
                     devices.splice(d, 1);
                 }
 
-            } else if (fKey === 'os' && isValidOsFilter(fValue)) {
-                if (!isOsMatch(device.osVersion, fValue)) {
-                    devices.splice(d, 1);
-                }
+            } else if (fKey === 'os' && isValidOsFilter(fValue) && !isOsMatch(device.osVersion, fValue)) {
+                devices.splice(d, 1);
             }
         }
     }
