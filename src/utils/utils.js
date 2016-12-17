@@ -13,11 +13,7 @@ exports.checkNull = function (obj, key) {
 };
 
 exports.isPropDefined = function (obj, prop) {
-    if (!obj.hasOwnProperty(prop)) {
-        return false;
-    } else {
-        return obj[prop] !== null && obj[prop] !== undefined;
-    }
+    return prop in obj && obj[prop] !== null && obj[prop] !== undefined;
 };
 
 exports.isDefined = function (obj) {

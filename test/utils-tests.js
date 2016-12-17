@@ -149,7 +149,11 @@ describe('Utils', function () {
     });
 
     it('Is prop defined', function () {
+
         assert.equal(utils.isPropDefined({a: 10}, 'a'), true);
+        assert.equal(utils.isPropDefined({a: '10'}, 'a'), true);
+        assert.equal(utils.isPropDefined({'a': 'b', 'z': 10, 'x': null}, 'a'), true);
+
         assert.equal(utils.isPropDefined({a: null}, 'a'), false);
         assert.equal(utils.isPropDefined({a: undefined}, 'a'), false);
         assert.equal(utils.isPropDefined({}, 'a'), false);
