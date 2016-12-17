@@ -76,7 +76,7 @@ class DatabaseSequelize{
     }
 
     getDevices(dataHandler, errorHandler) {
-        this.deviceModel.findAll().then(dataHandler).catch(errorHandler);
+        this.deviceModel.findAll({ order: 'manufacturer DESC'}).then(dataHandler).catch(errorHandler);
     }
 
     deleteDevice(id, successHandler, errorHandler) {
