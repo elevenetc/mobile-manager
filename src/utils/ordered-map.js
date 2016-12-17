@@ -9,8 +9,9 @@ class OrderedMap {
     }
 
     put(key, value) {
+        const contains = this.indexOfKey(key) > -1;
         this.map[key] = value;
-        this.array.push(key);
+        if (!contains) this.array.push(key);
     }
 
     get(key) {

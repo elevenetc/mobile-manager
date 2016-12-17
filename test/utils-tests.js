@@ -141,11 +141,25 @@ describe('Utils', function () {
     });
 
     it('OrderedMap: size', function () {
-        let orderedMap = new OrderedMap();
+        const orderedMap = new OrderedMap();
         orderedMap.put('a', 0);
         orderedMap.put('b', 1);
 
         assert.equal(orderedMap.size(), 2);
+    });
+
+    it('OrderedMap: check duplicates', function () {
+        const orderedMap = new OrderedMap();
+        orderedMap.put('a', 0);
+        orderedMap.put('a', 1);
+
+        orderedMap.iterate(function(key, value){
+            console.log(key + ':'+ value);
+            console.log(key + ':'+ value);
+        });
+
+        assert.equal(orderedMap.get('a'), 1);
+        assert.equal(orderedMap.size(), 1);
     });
 
     it('Is prop defined', function () {
