@@ -219,9 +219,13 @@ function filterDevices(devices, rawFilters) {
             } else if (stringFieldsMap.hasOwnProperty(fKey)) {
                 const devKey = stringFieldsMap[fKey];
 
-                if (device[devKey].toLowerCase() !== fValue.toLowerCase()) {
+                const devValue = device[devKey].toLowerCase();
+                const queryValue = fValue.toLowerCase().replace(/ /g, '');
+
+                if(devValue.indexOf(queryValue) === -1 && queryValue.indexOf(devValue) === -1){
                     devices.splice(d, 1);
                 }
+
             } else if (numericFieldsMap.hasOwnProperty(fKey)) {
                 const devKey = numericFieldsMap[fKey];
 

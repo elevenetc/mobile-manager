@@ -45,9 +45,9 @@ class PingManager {
 
     intervalPing() {
         this.pingDevices(function () {
-            logger.info('ping ok');
+            logger.info('ping request: ok');
         }, function (error) {
-            logger.error('ping error: %s', error);
+            logger.error('ping request: error %s', error);
         });
     }
 

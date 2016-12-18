@@ -73,6 +73,10 @@ describe('View utils', function () {
         assert.deepEqual(utils.filterDevices([{model: 'x'}, {model: 'y'}], 'model:x'), [{model: 'x'}]);
     });
 
+    it('Filter not exact model', function () {
+        assert.deepEqual(utils.filterDevices([{model: 'Nexus 4'}], 'model:nexus'), [{model: 'Nexus 4'}]);
+    });
+
     it('Filter by manufacturer', function () {
         assert.deepEqual(utils.filterDevices([{manufacturer: 'Samsung'}, {manufacturer: 'sony'}], 'manufacturer:samsung'), [{manufacturer: 'Samsung'}]);
     });

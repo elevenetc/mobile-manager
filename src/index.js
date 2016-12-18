@@ -5,6 +5,11 @@ const view = require('./view/view-slack');
 const utils = require('./utils/utils');
 const logger = require('./logger/logger');
 
+//TODO: rename package
+//TODO: fix name and publish
+//TODO: fix wifi quotes
+//TODO: add docs
+
 class DM {
 
     constructor(config) {
