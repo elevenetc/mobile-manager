@@ -59,6 +59,7 @@ describe('View utils', function () {
 
     it('filter with space', function () {
         assert.deepEqual(utils.filterDevices([{osVersion: '6.0'}, {osVersion: '7.1'}], 'os: 7.*'), [{osVersion: '7.1'}]);
+        assert.deepEqual(utils.filterDevices([{model: 'Nexus 4'}], 'model:nexus 4'), [{model: 'Nexus 4'}]);
     });
 
     it('Filter by wifi', function () {

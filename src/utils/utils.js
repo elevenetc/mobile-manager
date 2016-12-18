@@ -219,8 +219,8 @@ function filterDevices(devices, rawFilters) {
             } else if (stringFieldsMap.hasOwnProperty(fKey)) {
                 const devKey = stringFieldsMap[fKey];
 
-                const devValue = device[devKey].toLowerCase();
-                const queryValue = fValue.toLowerCase().replace(/ /g, '');
+                const devValue = device[devKey].toLowerCase().replace(/ /g, '');
+                const queryValue = fValue.toLowerCase();
 
                 if(devValue.indexOf(queryValue) === -1 && queryValue.indexOf(devValue) === -1){
                     devices.splice(d, 1);
