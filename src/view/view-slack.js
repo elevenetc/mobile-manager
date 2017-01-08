@@ -26,8 +26,9 @@ exports.renderDevices = function (type, devices, filters) {
 
 function render(devices, verbose, filters) {
 
-    let result = 'Filters: `' + filters + '`\n';
     let map = new OrderedMap();
+    let result = '';
+    if(utils.isDefined(filters) && '' !== filters) result = 'Filters: `' + filters + '`, ';
     result += 'Result: ' + devices.length + ' devices\n';
 
     for (let i = 0; i < devices.length; i++) {
@@ -62,6 +63,8 @@ function render(devices, verbose, filters) {
             map.put('screenWidth', screenWidth);
             map.put('screenHeight', screenHeight);
             map.put('wifi', wifiSSID);
+            map.put('cpuArch', device.cpuArch);
+            map.put('cpuCoreNum', device.cpuCoreNum);
 
             result += locAndDeviceName + isOnline + `\`os: ${osVersion}\` \`battery: ${batteryLevel}%\` `;
 
