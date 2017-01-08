@@ -26,7 +26,7 @@ class DeviceManager {
         errorHandler = errorHandler || function(){};
 
         if(!utils.isDeviceValid(device)){
-            errorHandler.call({error:'device not valid', device: device});
+            errorHandler({error:'device not valid', device: device});
             return;
         }
 

@@ -88,7 +88,7 @@ class DM {
             deviceManager.createOrUpdateDevice(req.body, function () {
                 res.send({});
             }, function (error) {
-                res.send(error);
+                res.send(400, new Error(JSON.stringify(error)));
             });
             return next();
         });
