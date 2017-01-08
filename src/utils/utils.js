@@ -17,14 +17,16 @@ const stringFieldsMap = {
     wifi: 'wifiSSID',
     platform: 'platform',
     model: 'model',
-    manufacturer: 'manufacturer'
+    manufacturer: 'manufacturer',
+    cpuArch: 'cpuArch'
 };
 
 const numericFieldsMap = {
     battery: 'batteryLevel',
     screenWidth: 'screenWidth',
     screenHeight: 'screenHeight',
-    screenSize: 'screenSize'
+    screenSize: 'screenSize',
+    cpuCoreNum: 'cpuCoreNum'
 };
 
 

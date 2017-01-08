@@ -41,7 +41,9 @@ class DatabaseSequelize{
             lon: {type: Sequelize.FLOAT},
             batteryLevel: {type: Sequelize.FLOAT},
             lastUpdateTime: {type: Sequelize.DATE},
-            isOnline: {type: Sequelize.BOOLEAN}
+            isOnline: {type: Sequelize.BOOLEAN},
+            cpuArch: {type: Sequelize.STRING},
+            cpuCoreNum: {type: Sequelize.INTEGER}
         }, {
             timestamps: false
         });
