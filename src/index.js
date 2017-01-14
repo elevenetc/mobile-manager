@@ -5,11 +5,9 @@ const view = require('./view/view-slack');
 const utils = require('./utils/utils');
 const logger = require('./logger/logger');
 
-//TODO: rename package
-//TODO: fix name and publish
 //TODO: add docs
 
-class DM {
+class MobileManager {
 
     constructor(config) {
         this.config = config;
@@ -30,8 +28,8 @@ class DM {
         const config = this.config;
 
         const server = restify.createServer({
-            name: 'device-manager',
-            version: '0.0.1',
+            name: 'mobile-manager',
+            version: '0.9.0',
             log: logger.getInst()
         });
 
@@ -141,4 +139,4 @@ class DM {
 
 }
 
-module.exports = DM;
+module.exports = MobileManager;
