@@ -26,6 +26,7 @@
     "remote"
   ],
   "homepage": "https://github.com/elevenetc/mobile-manager",
+  "main": "src/index.js",
   "dependencies": {
     "body-parser": "~1.15.1",
     "bunyan": "^1.8.5",
