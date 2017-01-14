@@ -1,13 +1,31 @@
 {
-  "name": "untitled",
-  "version": "0.0.0",
-  "private": true,
+  "name": "mobile-manager",
+  "version": "0.9.0",
+  "description": "Manager of mobiles devices",
+  "author": {
+    "name": "Eugene Levenetc",
+    "email": "hello@elevenetc.su",
+    "url": "https://elevenetc.su/"
+  },
   "scripts": {
     "start": "node ./src/app.js",
     "test": "mocha",
     "cover": "istanbul cover _mocha",
     "test-cov": "istanbul cover _mocha"
   },
+  "maintainers": [
+    {
+      "name": "elevenetc",
+      "email": "hello@elevenetc.su"
+    }
+  ],
+  "keywords": [
+    "mobile",
+    "device",
+    "android",
+    "remote"
+  ],
+  "homepage": "https://github.com/elevenetc/mobile-manager",
   "dependencies": {
     "body-parser": "~1.15.1",
     "bunyan": "^1.8.5",
@@ -26,5 +44,6 @@
     "mocha": "^3.2.0",
     "sinon": "^1.17.5",
     "mocha-lcov-reporter": "^1.2.0"
-  }
+  },
+  "license": "MIT"
 }
