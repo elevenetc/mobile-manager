@@ -5,7 +5,7 @@
 [![Test Coverage](https://codeclimate.com/github/elevenetc/device-manager-back-end/badges/coverage.svg)](https://codeclimate.com/github/elevenetc/device-manager-back-end/coverage)
 [![Issue Count](https://codeclimate.com/github/elevenetc/device-manager-back-end/badges/issue_count.svg)](https://codeclimate.com/github/elevenetc/device-manager-back-end)
 
-Node app which allows to track list of all your devices in Slack
+Node service for tracking devices in Slack.
 
 <p align="center"><img src="docs/imgs/slack-list-of-devices.png"/></p>
 
@@ -56,7 +56,7 @@ new MobileManager({
 And add `database name`, `database user name`, `database password`, `port`, `google cloud key` and `slack slash command key`.
 `pingTimeout` is time in milliseconds which defines how often server sends push messages to devices.
 ## Run
-1. `node app.js`
+`node app.js`
 ## Add devices
 [Build, install and bind client](https://github.com/elevenetc/mobile-manager-android-client)
 ## Licence
